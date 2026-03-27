@@ -981,7 +981,7 @@ Cena = [(Ropa_Litr + Akcyza + Opłata_Paliwowa + Opłata_Emisyjna + Koszty_Przer
               </p>
             </div>
             <img 
-              src="/Logo PRO bez tła.png" 
+              src="/logo-pro.png" 
               alt="Logo PRO" 
               className="h-60 w-auto mt-2 opacity-80 hover:opacity-100 transition-opacity"
               referrerPolicy="no-referrer"
