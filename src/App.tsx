@@ -344,7 +344,7 @@ export default function App() {
       }
 
       // Use process.env.API_KEY if a custom key is selected, otherwise fallback to GEMINI_API_KEY
-      const apiKey = (currentHasCustomKey && process.env.API_KEY) ? process.env.API_KEY : process.env.GEMINI_API_KEY;
+      const apiKey = (currentHasCustomKey && process.env.API_KEY) ? process.env.API_KEY : process.env.VITE_GEMINI_API_KEY;
       
       if (!apiKey) {
         throw new Error("Brak klucza API Gemini. Podłącz klucz, aby pobrać aktualne dane.");
