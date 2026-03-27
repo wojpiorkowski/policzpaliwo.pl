@@ -1,0 +1,5 @@
+{
+  "name": "POLICZPALIWO.PL",
+  "description": "Zaawansowany kalkulator i analizator cen paliw w Polsce oparty na notowaniach ropy Brent i kursie USD/PLN, zawierający dane historyczne z ostatnich 10 lat.",
+  "requestFramePermissions": []
+}
