@@ -980,13 +980,12 @@ Cena = [(Ropa_Litr + Akcyza + Opłata_Paliwowa + Opłata_Emisyjna + Koszty_Przer
                 Rzeczywiste ceny na stacjach paliw mogą się różnić w zależności od lokalizacji i polityki cenowej operatorów.
               </p>
             </div>
-            <img 
-              src="/logo-pro.png" 
-              alt="Logo PRO" 
-              className="h-60 w-auto mt-2 opacity-80 hover:opacity-100 transition-opacity"
+            <img
+              src="/logo-pro.png"
+              alt="Logo PRO"
+              className="h-80 w-auto mt-2 opacity-80 hover:opacity-100 transition-opacity"
               referrerPolicy="no-referrer"
-            />
-            <a 
+            />            <a 
               href="https://fundacjapro.org/" 
               target="_blank" 
               rel="noopener noreferrer"
