@@ -1,0 +1,6 @@
+# Pozwól wszystkim robotom na indeksowanie całej strony
+User-agent: *
+Allow: /
+
+# Opcjonalnie: wskaż adres mapy strony (jeśli ją stworzysz)
+Sitemap: https://policzpaliwo.pl/sitemap.xml
