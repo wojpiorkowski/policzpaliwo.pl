@@ -990,7 +990,7 @@ Cena = [(Ropa_Litr + Akcyza + Opłata_Paliwowa + Opłata_Emisyjna + Koszty_Przer
               href="https://fundacjapro.org/" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="mt-2 text-xs font-medium text-emerald-600 hover:text-emerald-700 transition-colors"
+              className="mt-2 text-xs font-medium text-slate-400 hover:text-slate-500 transition-colors"
             >
               fundacjapro.org
             </a>
