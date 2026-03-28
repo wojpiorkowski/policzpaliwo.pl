@@ -549,7 +549,7 @@ export default function App() {
                   if (realTimeData?.retailPb95) setActualStationPriceInput(realTimeData.retailPb95);
                 }}
                 className={cn(
-                  "px-4 py-1.5 rounded-lg text-xs font-bold transition-all",
+                  "px-6 py-2 rounded-lg text-sm font-bold transition-all",
                   fuelType === 'Pb95' ? "bg-white text-emerald-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
                 )}
               >
@@ -563,7 +563,7 @@ export default function App() {
                   if (realTimeData?.retailON) setActualStationPriceInput(realTimeData.retailON);
                 }}
                 className={cn(
-                  "px-4 py-1.5 rounded-lg text-xs font-bold transition-all",
+                  "px-6 py-2 rounded-lg text-sm font-bold transition-all",
                   fuelType === 'ON' ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                 )}
               >
@@ -576,7 +576,7 @@ export default function App() {
               <img
                 src="/logo-pro.png"
                 alt="Logo Fundacji Polskiego Rozwoju"
-                className="h-10 w-auto"
+                className="h-14 w-auto"
               />
             </a>
           </div>
@@ -688,7 +688,10 @@ export default function App() {
               <button 
                 onClick={fetchRealTimeData}
                 disabled={isLoading}
-                className="flex items-center gap-2 px-5 py-2.5 bg-slate-100 text-slate-600 rounded-2xl text-sm font-bold hover:bg-slate-200 transition-colors disabled:opacity-50"
+                className={cn(
+                  "flex items-center gap-2 px-5 py-2.5 text-white rounded-2xl text-sm font-bold hover:shadow-md transition-all disabled:opacity-50",
+                  fuelType === 'Pb95' ? "bg-emerald-600 hover:bg-emerald-700" : "bg-slate-900 hover:bg-slate-800"
+                )}
               >
                 <RefreshCw className={cn("w-4 h-4", isLoading && "animate-spin")} />
                 <span className="hidden sm:inline">{isLoading ? 'Aktualizuję dane...' : 'Aktualizuj dane'}</span>
@@ -831,15 +834,15 @@ export default function App() {
               <div className="pt-8 border-t border-slate-100 mt-6">
                   <div className="bg-slate-50 p-6 rounded-2xl flex flex-col md:flex-row items-center justify-evenly gap-6">
                     <div className="text-center w-full">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">SZACOWANA CENA DETALICZNA</p>
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">SZACOWANA CENA DETALICZNA</p>
                       <div className="flex items-baseline justify-center gap-2">
                         <span className={cn(
-                          "text-4xl font-black tracking-tighter",
+                          "text-5xl font-black tracking-tighter",
                           fuelType === 'Pb95' ? "text-emerald-600" : "text-slate-900"
                         )}>
                           {calculatedPrice.toFixed(2)}
                         </span>
-                        <span className="text-lg font-bold text-slate-400">PLN/l</span>
+                        <span className="text-xl font-bold text-slate-400">PLN/l</span>
                       </div>
                     </div>
 
@@ -847,15 +850,15 @@ export default function App() {
                     <div className="w-full h-px md:hidden bg-slate-200/50" />
 
                     <div className="text-center w-full">
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">AKTUALNA CENA DETALICZNA</p>
+                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">AKTUALNA CENA DETALICZNA</p>
                       <div className="flex items-baseline justify-center gap-2">
                         <span className={cn(
-                          "text-4xl font-black tracking-tighter",
+                          "text-5xl font-black tracking-tighter",
                           fuelType === 'Pb95' ? "text-emerald-600" : "text-slate-900"
                         )}>
                           {fuelType === 'Pb95' ? (realTimeData?.retailPb95 || '---') : (realTimeData?.retailON || '---')}
                         </span>
-                        <span className="text-lg font-bold text-slate-400">PLN/l</span>
+                        <span className="text-xl font-bold text-slate-400">PLN/l</span>
                       </div>
                     </div>
                   </div>
@@ -974,8 +977,8 @@ export default function App() {
             <div className="bg-white p-8 rounded-3xl border border-slate-200 shadow-sm h-full flex flex-col">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 bg-blue-50 rounded-xl">
-                    <BarChart3 className="w-6 h-6 text-blue-600" />
+                  <div className={cn("p-2 rounded-xl", fuelType === 'Pb95' ? "bg-emerald-50" : "bg-slate-100")}>
+                    <BarChart3 className={cn("w-6 h-6", fuelType === 'Pb95' ? "text-emerald-600" : "text-slate-900")} />
                   </div>
                   <div>
                     <h2 className="text-xl font-bold">Zmienność cenowa (10 lat)</h2>
@@ -1160,9 +1163,10 @@ export default function App() {
             <img
               src="/logo-pro.png"
               alt="Logo PRO"
-              className="h-80 w-auto mt-2 opacity-80 hover:opacity-100 transition-opacity"
+              className="h-40 w-auto mt-6 mb-2 opacity-80 hover:opacity-100 transition-opacity"
               referrerPolicy="no-referrer"
-            />            <a 
+            />
+            <a 
               href="https://fundacjapro.org/" 
               target="_blank" 
               rel="noopener noreferrer"
