@@ -1165,8 +1165,7 @@ export default function App() {
               alt="Logo PRO"
               className="h-40 w-auto mt-6 mb-2 opacity-80 hover:opacity-100 transition-opacity"
               referrerPolicy="no-referrer"
-            />
-            <a 
+            />            <a 
               href="https://fundacjapro.org/" 
               target="_blank" 
               rel="noopener noreferrer"
