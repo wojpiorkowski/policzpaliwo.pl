@@ -261,7 +261,7 @@ const InfoSection = () => (
 export default function App() {
   const [brentInput, setBrentInput] = useState(72);
   const [usdPlnInput, setUsdPlnInput] = useState(4.00);
-  const [refineryMarginInput, setRefineryMarginInput] = useState(0.26);
+  const [refineryMarginInput, setRefineryMarginInput] = useState(10);
   const [logisticsInput, setLogisticsInput] = useState(0.4);
   const [exciseInput, setExciseInput] = useState(1.5);
   const [fuelFeeInput, setFuelFeeInput] = useState(0.21);
@@ -317,7 +317,8 @@ export default function App() {
     vat: number
   ) => {
     const rawOilPricePlnL = (brent / 159) * usdPln;
-    const basePricePlnL = rawOilPricePlnL + refineryMargin;
+    const refMarginPlnL = (refineryMargin / 159) * usdPln;
+    const basePricePlnL = rawOilPricePlnL + refMarginPlnL;
     const sumWithoutRetailMargin = basePricePlnL + logistics + excise + fuelFee + reserveFee + emissionFee;
     const priceWithRetailMargin = sumWithoutRetailMargin * (1 + retailMargin / 100);
     const finalGrossPrice = priceWithRetailMargin * (1 + vat / 100);
@@ -333,7 +334,7 @@ export default function App() {
   const baseCalculatedPrice = useMemo(() => {
     const defaultExcise = fuelType === 'Pb95' ? 1.50 : 1.16;
     const defaultFuelFee = fuelType === 'Pb95' ? 0.21 : 0.42;
-    const defaultRefineryMargin = 0.26;
+    const defaultRefineryMargin = 10;
     const defaultLogistics = 0.40;
     const defaultReserveFee = 0.10;
     const defaultEmissionFee = 0.08;
@@ -349,7 +350,7 @@ export default function App() {
 
   const priceStructure = useMemo(() => {
     const rawOilPricePlnL = (brentInput / 159) * usdPlnInput;
-    const refMarginPlnL = refineryMarginInput;
+    const refMarginPlnL = (refineryMarginInput / 159) * usdPlnInput;
     const basePricePlnL = rawOilPricePlnL + refMarginPlnL;
     
     const sumWithoutRetailMargin = basePricePlnL + logisticsInput + exciseInput + fuelFeeInput + reserveFeeInput + emissionFeeInput;
@@ -373,7 +374,7 @@ export default function App() {
 
   const detailedPriceStructure = useMemo(() => {
     const rawOilPricePlnL = (brentInput / 159) * usdPlnInput;
-    const refMarginPlnL = refineryMarginInput;
+    const refMarginPlnL = (refineryMarginInput / 159) * usdPlnInput;
     const basePricePlnL = rawOilPricePlnL + refMarginPlnL;
     
     const sumWithoutRetailMargin = basePricePlnL + logisticsInput + exciseInput + fuelFeeInput + reserveFeeInput + emissionFeeInput;
@@ -510,7 +511,7 @@ export default function App() {
   const sliders = [
     { label: 'Ropa Brent', icon: Globe, color: 'text-blue-600', bg: 'bg-blue-50', accent: 'accent-blue-600', value: brentInput, setter: setBrentInput, min: 10, max: 200, step: 1, unit: 'USD/bbl', prefix: '$', suffix: '' },
     { label: 'Kurs USD/PLN', icon: DollarSign, color: 'text-red-600', bg: 'bg-red-50', accent: 'accent-red-600', value: usdPlnInput, setter: setUsdPlnInput, min: 3.0, max: 5.0, step: 0.01, unit: 'PLN', prefix: '', suffix: ' zł' },
-    { label: 'Marża Rafineryjna', icon: TrendingUp, color: 'text-orange-600', bg: 'bg-orange-50', accent: 'accent-orange-600', value: refineryMarginInput, setter: setRefineryMarginInput, min: 0.0, max: 2.0, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
+    { label: 'Marża Rafineryjna', icon: TrendingUp, color: 'text-orange-600', bg: 'bg-orange-50', accent: 'accent-orange-600', value: refineryMarginInput, setter: setRefineryMarginInput, min: 0, max: 50, step: 1, unit: 'USD/bbl', prefix: '$', suffix: '' },
     { label: 'Logistyka i Blending', icon: RefreshCw, color: 'text-slate-600', bg: 'bg-slate-100', accent: 'accent-slate-600', value: logisticsInput, setter: setLogisticsInput, min: 0.1, max: 0.8, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
     { label: 'Akcyza', icon: Zap, color: 'text-emerald-600', bg: 'bg-emerald-50', accent: 'accent-emerald-600', value: exciseInput, setter: setExciseInput, min: 0.0, max: 3.0, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
     { label: 'Opłata Paliwowa', icon: Fuel, color: 'text-emerald-600', bg: 'bg-emerald-50', accent: 'accent-emerald-600', value: fuelFeeInput, setter: setFuelFeeInput, min: 0.0, max: 0.3, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
@@ -620,7 +621,7 @@ export default function App() {
                         <p className="font-bold text-xs mb-2">Model wyliczania ceny:</p>
                         <ul className="space-y-1.5 text-slate-600">
                           <li><b className="text-slate-900">A:</b> Cena surowca = (Ropa Brent / 159 l) * Kurs USD/PLN</li>
-                          <li><b className="text-slate-900">B:</b> Baza w rafinerii = Cena surowca + Marża Rafineryjna</li>
+                          <li><b className="text-slate-900">B:</b> Baza w rafinerii = Cena surowca + (Marża Rafineryjna / 159) * Kurs USD/PLN</li>
                           <li><b className="text-slate-900">C:</b> Koszty hurtowe = Baza + Logistyka + Akcyza + Opłaty państwowe</li>
                           <li><b className="text-slate-900">D:</b> Cena detal. netto = Koszty hurtowe * (1 + Marża Detaliczna / 100)</li>
                           <li><b className="text-slate-900">E:</b> Cena końcowa brutto = Cena detal. netto * (1 + VAT / 100)</li>
