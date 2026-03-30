@@ -258,6 +258,59 @@ const InfoSection = () => (
   </div>
 );
 
+const ModelAssumptionsModal = ({ isOpen, onClose, fuelType }: { isOpen: boolean, onClose: () => void, fuelType: 'Pb95' | 'ON' }) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[200] flex items-center justify-center p-4"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+            transition={{ duration: 0.2 }}
+            className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full p-6 sm:p-8 relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+              <HelpCircle className="w-5 h-5 text-emerald-500" />
+              Założenia modelu
+            </h2>
+            <div className="space-y-3 text-sm text-slate-600 max-h-[60vh] overflow-y-auto pr-3 -mr-3">
+                <p>
+                    Szacowana cena z modelu stanowi analityczny punkt odniesienia (benchmark). Odzwierciedla ona teoretyczny poziom cen paliw przy założeniu długoterminowej równowagi rynkowej oraz standardowej efektywności kosztowej w łańcuchu dostaw. Model opiera się na 10-letnich danych historycznych, poddanych korekcie o wskaźniki makroekonomiczne.
+                </p>
+                <p className="font-bold pt-2">
+                    Kalkulacja opiera się na czterech filarach:
+                </p>
+                <ol className="list-decimal list-inside space-y-3 pl-2">
+                    <li><strong>Baza surowcowa i przerób (Crack Spread):</strong> Fundamentem wyliczeń są bieżące notowania ropy Brent, do których doliczana jest historyczna marża rafineryjna na poziomie 10 USD/bbl. Wartość ta stanowi średnią z lat 2016–2025, obejmującą pełen cykl koniunkturalny. Zastosowanie dolara amerykańskiego (USD) jest zgodne z globalnym standardem wyceny produktów naftowych i izoluje marżę produkcyjną od lokalnych wahań kursowych.</li>
+                    <li><strong>Urealnione koszty dystrybucji i marża detaliczna:</strong> Model przyjmuje koszty logistyki i blendingu na poziomie 0,40 PLN/l oraz marżę detaliczną stacji paliw w wysokości 0,22 PLN/l. Wartości te zostały wyznaczone na podstawie rocznych raportów branżowych POPiHN z dekady 2016–2025. W celu zachowania rzetelności ekonomicznej, historyczne marże z poszczególnych lat zostały zwaloryzowane wskaźnikiem skumulowanej inflacji konsumenckiej (CPI) według danych GUS. Dzięki temu benchmark uwzględnia współczesne, realne koszty operacyjne stacji (m.in. koszty pracy i nośników energii).</li>
+                    <li><strong>Obciążenia fiskalne i pozafiskalne:</strong> Do urealnionej ceny bazowej doliczane są sztywne, kwotowe obciążenia narzucone przez państwo: podatek akcyzowy, opłata paliwowa, opłata zapasowa oraz opłata emisyjna. Ich stawki wynikają z aktualnie obowiązujących obwieszczeń Ministerstwa Finansów.</li>
+                    <li><strong>Podatek od towarów i usług (VAT):</strong> Finalnym etapem kalkulacji jest aplikacja obowiązującej stawki podatku VAT (23%) do sumy wszystkich składowych netto, co pozwala uzyskać szacowaną cenę detaliczną brutto.</li>
+                </ol>
+                <p className="font-bold pt-2">Interpretacja wyników:</p>
+                <p>Różnica między aktualną średnią ceną rynkową a wyznaczoną ceną szacunkową wskazuje poziom anomalii rynkowej – najczęściej wynikającej z absorpcji nadmiarowych marż (tzw. premii rynkowej) przez sektor naftowy.</p>
+            </div>
+            <button onClick={onClose} className={cn(
+              "mt-6 w-full font-bold py-3 px-4 rounded-xl transition-colors",
+              "text-white",
+              fuelType === 'Pb95' ? "bg-emerald-600 hover:bg-emerald-700" : "bg-slate-800 hover:bg-slate-900"
+            )}>
+              Zamknij
+            </button>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 export default function App() {
   const [brentInput, setBrentInput] = useState(72);
   const [usdPlnInput, setUsdPlnInput] = useState(4.00);
@@ -267,7 +320,7 @@ export default function App() {
   const [fuelFeeInput, setFuelFeeInput] = useState(0.21);
   const [reserveFeeInput, setReserveFeeInput] = useState(0.10);
   const [emissionFeeInput, setEmissionFeeInput] = useState(0.08);
-  const [retailMarginInput, setRetailMarginInput] = useState(10);
+  const [retailMarginInput, setRetailMarginInput] = useState(0.22);
   const [vatInput, setVatInput] = useState(23);
   
   const [fuelType, setFuelType] = useState<'Pb95' | 'ON'>('Pb95');
@@ -275,6 +328,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasCustomKey, setHasCustomKey] = useState<boolean | null>(null);
+  const [isModelAssumptionsModalOpen, setIsModelAssumptionsModalOpen] = useState(false);
 
   useEffect(() => {
     const checkApiKey = async (retries = 3) => {
@@ -320,7 +374,7 @@ export default function App() {
     const refMarginPlnL = (refineryMargin / 159) * usdPln;
     const basePricePlnL = rawOilPricePlnL + refMarginPlnL;
     const sumWithoutRetailMargin = basePricePlnL + logistics + excise + fuelFee + reserveFee + emissionFee;
-    const priceWithRetailMargin = sumWithoutRetailMargin * (1 + retailMargin / 100);
+    const priceWithRetailMargin = sumWithoutRetailMargin + retailMargin;
     const finalGrossPrice = priceWithRetailMargin * (1 + vat / 100);
     return finalGrossPrice;
   };
@@ -334,11 +388,11 @@ export default function App() {
   const baseCalculatedPrice = useMemo(() => {
     const defaultExcise = fuelType === 'Pb95' ? 1.50 : 1.16;
     const defaultFuelFee = fuelType === 'Pb95' ? 0.21 : 0.42;
-    const defaultRefineryMargin = 10;
+    const defaultRefineryMargin = 10.0;
     const defaultLogistics = 0.40;
     const defaultReserveFee = 0.10;
     const defaultEmissionFee = 0.08;
-    const defaultRetailMargin = 10;
+    const defaultRetailMargin = 0.22;
     const defaultVat = 23;
 
     return calculatePrice(
@@ -355,7 +409,7 @@ export default function App() {
     
     const sumWithoutRetailMargin = basePricePlnL + logisticsInput + exciseInput + fuelFeeInput + reserveFeeInput + emissionFeeInput;
     
-    const retailMarginAmount = sumWithoutRetailMargin * (retailMarginInput / 100);
+    const retailMarginAmount = retailMarginInput;
     const priceWithRetailMargin = sumWithoutRetailMargin + retailMarginAmount;
     
     const vatAmount = priceWithRetailMargin * (vatInput / 100);
@@ -379,7 +433,7 @@ export default function App() {
     
     const sumWithoutRetailMargin = basePricePlnL + logisticsInput + exciseInput + fuelFeeInput + reserveFeeInput + emissionFeeInput;
     
-    const retailMarginAmount = sumWithoutRetailMargin * (retailMarginInput / 100);
+    const retailMarginAmount = retailMarginInput;
     const priceWithRetailMargin = sumWithoutRetailMargin + retailMarginAmount;
     
     const vatAmount = priceWithRetailMargin * (vatInput / 100);
@@ -511,13 +565,13 @@ export default function App() {
   const sliders = [
     { label: 'Ropa Brent', icon: Globe, color: 'text-blue-600', bg: 'bg-blue-50', accent: 'accent-blue-600', value: brentInput, setter: setBrentInput, min: 10, max: 200, step: 1, unit: 'USD/bbl', prefix: '$', suffix: '' },
     { label: 'Kurs USD/PLN', icon: DollarSign, color: 'text-red-600', bg: 'bg-red-50', accent: 'accent-red-600', value: usdPlnInput, setter: setUsdPlnInput, min: 3.0, max: 5.0, step: 0.01, unit: 'PLN', prefix: '', suffix: ' zł' },
-    { label: 'Marża Rafineryjna', icon: TrendingUp, color: 'text-orange-600', bg: 'bg-orange-50', accent: 'accent-orange-600', value: refineryMarginInput, setter: setRefineryMarginInput, min: 0, max: 50, step: 1, unit: 'USD/bbl', prefix: '$', suffix: '' },
+    { label: 'Marża Rafineryjna', icon: TrendingUp, color: 'text-orange-600', bg: 'bg-orange-50', accent: 'accent-orange-600', value: refineryMarginInput, setter: setRefineryMarginInput, min: 2, max: 50, step: 1, unit: 'USD/bbl', prefix: '$', suffix: '' },
     { label: 'Logistyka i Blending', icon: RefreshCw, color: 'text-slate-600', bg: 'bg-slate-100', accent: 'accent-slate-600', value: logisticsInput, setter: setLogisticsInput, min: 0.1, max: 0.8, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
     { label: 'Akcyza', icon: Zap, color: 'text-emerald-600', bg: 'bg-emerald-50', accent: 'accent-emerald-600', value: exciseInput, setter: setExciseInput, min: 0.0, max: 3.0, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
     { label: 'Opłata Paliwowa', icon: Fuel, color: 'text-emerald-600', bg: 'bg-emerald-50', accent: 'accent-emerald-600', value: fuelFeeInput, setter: setFuelFeeInput, min: 0.0, max: 0.3, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
     { label: 'Opłata Zapasowa', icon: History, color: 'text-emerald-600', bg: 'bg-emerald-50', accent: 'accent-emerald-600', value: reserveFeeInput, setter: setReserveFeeInput, min: 0.00, max: 0.15, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
     { label: 'Opłata Emisyjna', icon: AlertCircle, color: 'text-emerald-600', bg: 'bg-emerald-50', accent: 'accent-emerald-600', value: emissionFeeInput, setter: setEmissionFeeInput, min: 0.00, max: 0.15, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
-    { label: 'Marża Detaliczna', icon: Store, color: 'text-purple-600', bg: 'bg-purple-50', accent: 'accent-purple-600', value: retailMarginInput, setter: setRetailMarginInput, min: 0, max: 15, step: 0.1, unit: '%', prefix: '', suffix: '%' },
+    { label: 'Marża Detaliczna', icon: Store, color: 'text-purple-600', bg: 'bg-purple-50', accent: 'accent-purple-600', value: retailMarginInput, setter: setRetailMarginInput, min: 0.1, max: 0.5, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
     { label: 'Stawka VAT', icon: BarChart3, color: 'text-purple-600', bg: 'bg-purple-50', accent: 'accent-purple-600', value: vatInput, setter: setVatInput, min: 0, max: 23, step: 1, unit: '%', prefix: '', suffix: '%' },
   ];
 
@@ -525,7 +579,7 @@ export default function App() {
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-emerald-100 selection:text-emerald-900">
       {/* Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 grid grid-cols-3 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-between gap-y-2 py-3 md:h-16">
           <div className="flex items-center gap-2 justify-start">
             <div className={cn(
               "w-10 h-10 rounded-xl flex items-center justify-center shadow-lg transition-colors duration-300",
@@ -540,14 +594,13 @@ export default function App() {
               </h1>
             </div>
           </div>
-          <div className="flex justify-center">
+          <div className="w-full md:w-auto flex justify-center order-last md:order-none">
             <div className="bg-slate-100 p-1 rounded-xl flex gap-1 border border-slate-200">
               <button 
                 onClick={() => {
                   setFuelType('Pb95');
                   setExciseInput(1.50);
                   setFuelFeeInput(0.21);
-                  if (realTimeData?.retailPb95) setActualStationPriceInput(realTimeData.retailPb95);
                 }}
                 className={cn(
                   "px-6 py-2 rounded-lg text-sm font-bold transition-all",
@@ -561,7 +614,6 @@ export default function App() {
                   setFuelType('ON');
                   setExciseInput(1.16);
                   setFuelFeeInput(0.42);
-                  if (realTimeData?.retailON) setActualStationPriceInput(realTimeData.retailON);
                 }}
                 className={cn(
                   "px-6 py-2 rounded-lg text-sm font-bold transition-all",
@@ -572,15 +624,13 @@ export default function App() {
               </button>
           </div>
           </div>
-          <div className="flex justify-end">
-            <a href="https://fundacjapro.org/" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity">
-              <img
-                src="/logo-pro.png"
-                alt="Logo Fundacji Polskiego Rozwoju"
-                className="h-14 w-auto"
-              />
-            </a>
-          </div>
+          <a href="https://fundacjapro.org/" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity md:order-last">
+            <img
+              src="/logo-pro.png"
+              alt="Logo Fundacji Polskiego Rozwoju"
+              className="h-8 md:h-14 w-auto"
+            />
+          </a>
       </div>
       </header>
 
@@ -614,20 +664,13 @@ export default function App() {
                 <div className="flex flex-col md:pr-10">
                   <div className="flex items-center gap-2 mb-3">
                     <Zap className="w-5 h-5 text-emerald-400" />
-                    <h3 className="text-lg font-medium text-white/90">Szacowana cena z modelu</h3>
-                    <div className="relative flex items-center group ml-1">
-                      <Info className="w-4 h-4 text-white/40 cursor-help hover:text-white transition-colors" />
-                      <div className="absolute top-full left-0 mt-2 w-72 sm:w-80 p-4 bg-white text-slate-800 text-[10px] leading-relaxed rounded-xl shadow-2xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-[100] border border-slate-100 pointer-events-none">
-                        <p className="font-bold text-xs mb-2">Model wyliczania ceny:</p>
-                        <ul className="space-y-1.5 text-slate-600">
-                          <li><b className="text-slate-900">A:</b> Cena surowca = (Ropa Brent / 159 l) * Kurs USD/PLN</li>
-                          <li><b className="text-slate-900">B:</b> Baza w rafinerii = Cena surowca + (Marża Rafineryjna / 159) * Kurs USD/PLN</li>
-                          <li><b className="text-slate-900">C:</b> Koszty hurtowe = Baza + Logistyka + Akcyza + Opłaty państwowe</li>
-                          <li><b className="text-slate-900">D:</b> Cena detal. netto = Koszty hurtowe * (1 + Marża Detaliczna / 100)</li>
-                          <li><b className="text-slate-900">E:</b> Cena końcowa brutto = Cena detal. netto * (1 + VAT / 100)</li>
-                        </ul>
-                      </div>
-                    </div>
+                    <h3 className="text-lg font-medium text-white/90">Szacowana cena z modelu</h3>                    
+                    <button 
+                      onClick={() => setIsModelAssumptionsModalOpen(true)}
+                      className="ml-2 text-xs font-bold text-white/60 hover:text-white hover:bg-white/10 py-1 px-3 rounded-lg transition-all duration-200 border border-white/20 hover:border-white/30"
+                    >
+                      Założenia modelu
+                    </button>
                   </div>
                   <div className="flex items-baseline gap-2">
                     <span className="text-6xl sm:text-7xl font-black tracking-tighter">
@@ -1177,6 +1220,8 @@ export default function App() {
           </div>
         </footer>
       </main>
+
+      <ModelAssumptionsModal isOpen={isModelAssumptionsModalOpen} onClose={() => setIsModelAssumptionsModalOpen(false)} fuelType={fuelType} />
     </div>
   );
 }
