@@ -111,6 +111,34 @@ const HISTORICAL_DATA: HistoricalData[] = [
   { date: '2026-03', brent: 101.04, usdPln: 3.65, pricePb95: 6.85, priceON: 7.75 },
 ];
 
+const refineryHistory = [
+  { year: '2016', q: [5.8, 5.2, 4.9, 4.5] },
+  { year: '2017', q: [5.1, 6.1, 6.5, 5.9] },
+  { year: '2018', q: [4.8, 5.5, 6.2, 5.5] },
+  { year: '2019', q: [4.9, 4.6, 4.2, 3.9] },
+  { year: '2020', q: [3.2, 1.1, 1.8, 2.3] },
+  { year: '2021', q: [2.5, 3.5, 5.8, 7.4] },
+  { year: '2022', q: [7.8, 20.5, 35.2, 45.3] },
+  { year: '2023', q: [21.2, 15.5, 14.8, 14.1] },
+  { year: '2024', q: [13.5, 14.1, 10.3, 13.3] },
+  { year: '2025', q: [11.2, 10.5, 10.0, 10.3] },
+  { year: '2026', q: [10.5, null, null, null], current: 10.8 }
+];
+
+const logisticsHistory = [
+  { year: '2016', q: [0.19, 0.20, 0.20, 0.21] },
+  { year: '2017', q: [0.21, 0.22, 0.22, 0.23] },
+  { year: '2018', q: [0.23, 0.24, 0.24, 0.25] },
+  { year: '2019', q: [0.24, 0.25, 0.25, 0.26] },
+  { year: '2020', q: [0.27, 0.28, 0.28, 0.29] },
+  { year: '2021', q: [0.30, 0.32, 0.33, 0.35] },
+  { year: '2022', q: [0.38, 0.44, 0.48, 0.46] },
+  { year: '2023', q: [0.44, 0.43, 0.42, 0.42] },
+  { year: '2024', q: [0.41, 0.40, 0.40, 0.41] },
+  { year: '2025', q: [0.41, 0.42, 0.42, 0.43] },
+  { year: '2026', q: [0.43, null, null, null], current: 0.40 }
+];
+
 // --- Components ---
 
 const StatCard = ({ title, value, unit, icon: Icon, description, variant = 'default', badge, tooltip, extra }: any) => {
@@ -329,6 +357,8 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [hasCustomKey, setHasCustomKey] = useState<boolean | null>(null);
   const [isModelAssumptionsModalOpen, setIsModelAssumptionsModalOpen] = useState(false);
+  const [showRefineryTooltip, setShowRefineryTooltip] = useState(false);
+  const [showLogisticsTooltip, setShowLogisticsTooltip] = useState(false);
 
   useEffect(() => {
     const checkApiKey = async (retries = 3) => {
@@ -845,11 +875,29 @@ export default function App() {
                     </h3>
                     <div className="space-y-4">
                       {group.items.map((s, i) => (
-                        <div key={i} className="space-y-3 bg-slate-50/50 p-4 rounded-2xl border border-slate-100 hover:bg-slate-50 transition-colors">
+                        <div key={i} className="relative space-y-3 bg-slate-50/50 p-4 rounded-2xl border border-slate-100 hover:bg-slate-50 transition-colors">
                           <div className="flex justify-between items-end">
                             <div className="flex items-center gap-2">
                               <s.icon className={cn("w-4 h-4", s.color)} />
                               <label className="text-sm font-semibold text-slate-600">{s.label} ({s.unit})</label>
+                              {s.label === 'Marża Rafineryjna' && (
+                                <button
+                                  onMouseEnter={() => setShowRefineryTooltip(true)}
+                                  onMouseLeave={() => setShowRefineryTooltip(false)}
+                                  className="text-slate-400 hover:text-orange-500 transition-colors"
+                                >
+                                  <History className="w-4 h-4" />
+                                </button>
+                              )}
+                              {s.label === 'Logistyka i Blending' && (
+                                <button
+                                  onMouseEnter={() => setShowLogisticsTooltip(true)}
+                                  onMouseLeave={() => setShowLogisticsTooltip(false)}
+                                  className="text-slate-400 hover:text-slate-600 transition-colors"
+                                >
+                                  <History className="w-4 h-4" />
+                                </button>
+                              )}
                             </div>
                             <span className={cn("text-lg font-bold", s.color)}>
                               {s.prefix}{s.value.toFixed(s.step >= 1 ? 0 : 2)}{s.suffix}
@@ -868,6 +916,94 @@ export default function App() {
                             <span>{s.prefix}{s.min.toFixed(s.step >= 1 ? 0 : 2)}{s.suffix}</span>
                             <span>{s.prefix}{s.max.toFixed(s.step >= 1 ? 0 : 2)}{s.suffix}</span>
                           </div>
+                          {s.label === 'Marża Rafineryjna' && (
+                            <AnimatePresence>
+                              {showRefineryTooltip && (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-800 text-white rounded-xl p-4 shadow-2xl z-[100]"
+                                >
+                                  <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Modelowej Marży Rafineryjnej (USD/bbl)</h4>
+                                  <table className="w-full text-xs text-left">
+                                    <thead>
+                                      <tr className="border-b border-slate-600">
+                                        <th className="py-2 font-semibold text-slate-400">Rok</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {refineryHistory.map(item => (
+                                        <tr key={item.year} className="border-b border-slate-700 last:border-b-0">
+                                          <td className="py-1.5 font-bold text-slate-300">{item.year}</td>
+                                          {item.q.map((val, i) => (
+                                            <td key={i} className={cn(
+                                              "py-1.5 text-center font-mono",
+                                              val && val > 20 ? "font-extrabold text-amber-400" : "text-slate-300"
+                                            )}>
+                                              {val !== null ? val.toFixed(1) : '-'}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                  <p className="text-[10px] text-slate-500 mt-3 text-right">
+                                    Źródło: Dane makro Orlen S.A. (Modelowa Marża Rafineryjna)
+                                  </p>
+                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-800" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          )}
+                          {s.label === 'Logistyka i Blending' && (
+                            <AnimatePresence>
+                              {showLogisticsTooltip && (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-800 text-white rounded-xl p-4 shadow-2xl z-[100]"
+                                >
+                                  <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Kosztów Logistycznych (PLN/l)</h4>
+                                  <table className="w-full text-xs text-left">
+                                    <thead>
+                                      <tr className="border-b border-slate-600">
+                                        <th className="py-2 font-semibold text-slate-400">Rok</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {logisticsHistory.map(item => (
+                                        <tr key={item.year} className="border-b border-slate-700 last:border-b-0">
+                                          <td className="py-1.5 font-bold text-slate-300">{item.year}</td>
+                                          {item.q.map((val, i) => (
+                                            <td key={i} className={cn(
+                                              "py-1.5 text-center font-mono",
+                                              val && val > 0.40 ? "font-extrabold text-amber-400" : "text-slate-300"
+                                            )}>
+                                              {val !== null ? val.toFixed(2) : '-'}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                  <p className="text-[10px] text-slate-500 mt-3 text-right">
+                                    Źródło: Raporty roczne POPiHN (Polska Organizacja Przemysłu i Handlu Naftowego)
+                                  </p>
+                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-800" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          )}
                         </div>
                       ))}
                     </div>
@@ -1029,14 +1165,17 @@ export default function App() {
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-x-4 gap-y-2">
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-10 h-4 rounded-sm border-2 border-emerald-500 bg-emerald-50" />
-                    <span className="text-[10px] font-bold text-slate-500 uppercase">Cena Pb95 (PLN/l)</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-10 h-4 rounded-sm border-2 border-slate-900 bg-slate-100" />
-                    <span className="text-[10px] font-bold text-slate-500 uppercase">Cena ON (PLN/l)</span>
-                  </div>
+                  {fuelType === 'Pb95' ? (
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-10 h-4 rounded-sm border-2 border-emerald-500 bg-emerald-50" />
+                      <span className="text-[10px] font-bold text-slate-500 uppercase">Cena Pb95 (PLN/l)</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-10 h-4 rounded-sm border-2 border-slate-900 bg-slate-100" />
+                      <span className="text-[10px] font-bold text-slate-500 uppercase">Cena ON (PLN/l)</span>
+                    </div>
+                  )}
                   <div className="flex items-center gap-1.5">
                     <div className="w-8 h-0 border-t-2 border-dashed border-blue-400" />
                     <span className="text-[10px] font-bold text-slate-500 uppercase">Ropa Brent (USD/bbl)</span>
@@ -1106,30 +1245,33 @@ export default function App() {
                         return `${months[month] || month} ${year}`;
                       }}
                     />
-                    <Area 
-                      yAxisId="left"
-                      type="monotone" 
-                      dataKey="pricePb95" 
-                      name="Cena Pb95"
-                      stroke="#10b981" 
-                      strokeWidth={3}
-                      fillOpacity={1} 
-                      fill="url(#colorPb95)" 
-                      dot={false}
-                      activeDot={{ r: 6, strokeWidth: 0, fill: '#10b981' }}
-                    />
-                    <Area 
-                      yAxisId="left"
-                      type="monotone" 
-                      dataKey="priceON" 
-                      name="Cena ON"
-                      stroke="#0f172a" 
-                      strokeWidth={3}
-                      fillOpacity={1} 
-                      fill="url(#colorON)" 
-                      dot={false}
-                      activeDot={{ r: 6, strokeWidth: 0, fill: '#0f172a' }}
-                    />
+                    {fuelType === 'Pb95' ? (
+                      <Area 
+                        yAxisId="left"
+                        type="monotone" 
+                        dataKey="pricePb95" 
+                        name="Cena Pb95"
+                        stroke="#10b981" 
+                        strokeWidth={3}
+                        fillOpacity={1} 
+                        fill="url(#colorPb95)" 
+                        dot={false}
+                        activeDot={{ r: 6, strokeWidth: 0, fill: '#10b981' }}
+                      />
+                    ) : (
+                      <Area 
+                        yAxisId="left"
+                        type="monotone" 
+                        dataKey="priceON" 
+                        name="Cena ON"
+                        stroke="#0f172a" 
+                        strokeWidth={3}
+                        fillOpacity={1} 
+                        fill="url(#colorON)" 
+                        dot={false}
+                        activeDot={{ r: 6, strokeWidth: 0, fill: '#0f172a' }}
+                      />
+                    )}
                     <Line 
                       yAxisId="right"
                       type="monotone" 
