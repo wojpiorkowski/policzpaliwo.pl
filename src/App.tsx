@@ -22,6 +22,8 @@ import {
   Info,
   Calculator,
   History,
+  ArrowUpRight,
+  ArrowDownRight,
   ArrowRight,
   AlertCircle,
   RefreshCw,
@@ -54,6 +56,25 @@ interface HistoricalData {
   pricePb95: number;
   priceON: number;
 }
+
+interface RegionalPrice {
+  name: string;
+  pricePb95: number;
+  priceON: number;
+  trend: 'up' | 'down' | 'stable';
+}
+
+interface RegionalPrices {
+  [key: string]: RegionalPrice;
+}
+
+const initialRegionalPrices: RegionalPrices = {
+  PL: { name: 'Polska', pricePb95: 6.70, priceON: 6.95, trend: 'stable' },
+  DE: { name: 'Niemcy', pricePb95: 8.12, priceON: 7.80, trend: 'up' },
+  CZ: { name: 'Czechy', pricePb95: 7.05, priceON: 6.90, trend: 'down' },
+  SK: { name: 'Słowacja', pricePb95: 6.98, priceON: 6.85, trend: 'stable' },
+  LT: { name: 'Litwa', pricePb95: 6.55, priceON: 6.40, trend: 'down' }
+};
 
 const HISTORICAL_DATA: HistoricalData[] = [
   // 2016
@@ -179,34 +200,6 @@ const dieselExciseHistory = [
   { year: '2024', q: [1.16, 1.16, 1.16, 1.16] },
   { year: '2025', q: [1.16, 1.16, 1.16, 1.16] },
   { year: '2026', q: [1.16, null, null, null], current: 1.16 }
-];
-
-const brentHistory = [
-  { year: '2016', q: [34.74, 48.13, 42.46, 48.30] },
-  { year: '2017', q: [55.70, 51.73, 52.65, 61.37] },
-  { year: '2018', q: [67.78, 75.92, 74.16, 74.84] },
-  { year: '2019', q: [62.46, 72.19, 64.07, 59.30] },
-  { year: '2020', q: [57.77, 18.11, 43.13, 36.33] }, // COVID-19
-  { year: '2021', q: [55.25, 67.73, 77.72, 83.10] },
-  { year: '2022', q: [92.35, 108.36, 111.51, 93.30] },
-  { year: '2023', q: [83.42, 81.32, 85.22, 86.82] },
-  { year: '2024', q: [82.98, 88.23, 81.39, 73.25] },
-  { year: '2025', q: [77.11, 63.37, 73.43, 65.44] },
-  { year: '2026', q: [101.04, null, null, null], current: 101.04 }
-];
-
-const usdPlnHistory = [
-  { year: '2016', q: [4.05, 3.95, 3.90, 3.85] },
-  { year: '2017', q: [4.10, 3.95, 3.70, 3.65] },
-  { year: '2018', q: [3.45, 3.40, 3.70, 3.75] },
-  { year: '2019', q: [3.75, 3.80, 3.85, 3.95] },
-  { year: '2020', q: [3.80, 4.20, 3.95, 3.90] },
-  { year: '2021', q: [3.75, 3.80, 3.90, 4.00] },
-  { year: '2022', q: [4.05, 4.30, 4.75, 4.85] }, // Wojna na Ukrainie i kryzys energetyczny
-  { year: '2023', q: [4.40, 4.20, 4.05, 4.25] },
-  { year: '2024', q: [4.00, 4.05, 3.95, 4.05] },
-  { year: '2025', q: [4.00, 3.85, 3.95, 4.05] },
-  { year: '2026', q: [3.65, null, null, null], current: 3.65 }
 ];
 
 const surchargeHistory = [
@@ -507,6 +500,10 @@ export default function App() {
   const [showStrategicReserveTooltip, setShowStrategicReserveTooltip] = useState(false);
   const [showEmissionFeeTooltip, setShowEmissionFeeTooltip] = useState(false);
   const [showVatTooltip, setShowVatTooltip] = useState(false);
+  const [regionalPrices, setRegionalPrices] = useState<RegionalPrices>(initialRegionalPrices);
+  const [regionalPricesLoading, setRegionalPricesLoading] = useState(true);
+  const [regionalPricesError, setRegionalPricesError] = useState<string | null>(null);
+
 
   useEffect(() => {
     const checkApiKey = async (retries = 3) => {
@@ -522,6 +519,64 @@ export default function App() {
     };
     checkApiKey();
   }, []);
+
+  const fetchLiveRegionalPrices = async (retryCount = 0) => {
+    setRegionalPricesLoading(true);
+    setRegionalPricesError(null);
+
+    try {
+      let currentHasCustomKey = hasCustomKey;
+      if (window.aistudio?.hasSelectedApiKey) {
+        currentHasCustomKey = await window.aistudio.hasSelectedApiKey();
+        setHasCustomKey(currentHasCustomKey);
+      }
+      const apiKey = (currentHasCustomKey && process.env.API_KEY) ? process.env.API_KEY : import.meta.env.VITE_GEMINI_API_KEY;
+
+      if (!apiKey) {
+        throw new Error("Brak klucza API Gemini. Podłącz klucz, aby pobrać aktualne dane regionalne.");
+      }
+
+      const ai = new GoogleGenAI({ apiKey });
+      const response = await ai.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: `Pobierz aktualne ceny paliw (Benzyna 95 i Olej napędowy) dla krajów: Polska, Niemcy, Czechy, Słowacja, Litwa ze strony https://www.e-petrol.pl/notowania/rynki-zagraniczne/stacje-paliw-europa. Zwróć dane DOKŁADNIE w formacie JSON, używając kodów krajów jako kluczy: { "PL": { "pricePb95": liczba, "priceON": liczba }, "DE": { "pricePb95": liczba, "priceON": liczba }, "CZ": { "pricePb95": liczba, "priceON": liczba }, "SK": { "pricePb95": liczba, "priceON": liczba }, "LT": { "pricePb95": liczba, "priceON": liczba } }`,
+        config: {
+          tools: [{ googleSearch: {} }, { urlContext: {} }],
+          responseMimeType: "application/json"
+        }
+      });
+
+      const newPrices = JSON.parse(response.text || "{}");
+
+      if (Object.keys(newPrices).length < 5 || !newPrices.PL || !newPrices.DE || !newPrices.CZ || !newPrices.SK || !newPrices.LT) {
+        throw new Error("Nie udało się pobrać cen regionalnych dla wszystkich krajów z AI.");
+      }
+
+      setRegionalPrices(prev => {
+        const updated = { ...prev };
+        for (const code in newPrices) {
+          if (updated[code] && newPrices[code]) {
+            updated[code] = { ...updated[code], ...newPrices[code] };
+          }
+        }
+        return updated;
+      });
+
+    } catch (err: any) {
+      console.error("Błąd podczas pobierania cen regionalnych przez AI:", err);
+      let errorMessage = err.message || "Wystąpił błąd podczas pobierania cen regionalnych.";
+
+      if (retryCount < 1) {
+        setTimeout(() => fetchLiveRegionalPrices(retryCount + 1), 1500);
+        return;
+      }
+
+      setRegionalPricesError(errorMessage);
+      setRegionalPrices(initialRegionalPrices);
+    } finally {
+      setRegionalPricesLoading(false);
+    }
+  };
 
   const handleSelectKey = async () => {
     if (window.aistudio?.openSelectKey) {
@@ -796,10 +851,11 @@ export default function App() {
       // Delay initial fetch to ensure environment is fully ready
       const timer = setTimeout(() => {
         fetchRealTimeData();
+        fetchLiveRegionalPrices();
       }, 800);
       return () => clearTimeout(timer);
     }
-  }, [hasCustomKey === null]);
+  }, [hasCustomKey]);
 
   // Configuration of sliders for dynamic rendering
   const sliders = [
@@ -1956,6 +2012,82 @@ export default function App() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Regional Comparison Section */}
+        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
+            <div className="flex items-center gap-3">
+              <div className={cn("p-2 rounded-xl", fuelType === 'Pb95' ? "bg-emerald-50" : "bg-slate-100")}>
+                <Globe className={cn("w-6 h-6", fuelType === 'Pb95' ? "text-emerald-600" : "text-slate-900")} />
+              </div>
+              <h2 className="text-xl font-bold">Porównanie regionalne (Europa Środkowa)</h2>
+            </div>
+            <button
+              onClick={fetchLiveRegionalPrices}
+              disabled={regionalPricesLoading}
+              className={cn(
+                "flex items-center gap-2 px-4 py-2 text-white rounded-xl text-xs font-bold hover:shadow-md transition-all disabled:opacity-50 self-start sm:self-center",
+                fuelType === 'Pb95' ? "bg-emerald-600 hover:bg-emerald-700" : "bg-slate-900 hover:bg-slate-800"
+              )}
+            >
+              <RefreshCw className={cn("w-3 h-3", regionalPricesLoading && "animate-spin")} />
+              <span>{regionalPricesLoading ? 'Odświeżam...' : 'Odśwież'}</span>
+            </button>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            {/* Poland Card */}
+            <div className="lg:col-span-2 bg-slate-50/70 border border-slate-200 rounded-2xl p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-3xl">🇵🇱</span>
+                  <h3 className="text-lg font-bold text-slate-800">{regionalPrices.PL.name}</h3>
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className={cn("text-3xl font-black", fuelType === 'Pb95' ? 'text-emerald-600' : 'text-slate-800')}>
+                    {(fuelType === 'Pb95' ? regionalPrices.PL.pricePb95 : regionalPrices.PL.priceON).toFixed(2)}
+                  </span>
+                  <span className="font-bold text-slate-400">PLN/l</span>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {['DE', 'CZ', 'SK', 'LT'].map(code => {
+                  const neighbor = regionalPrices[code];
+                  const polandPrice = fuelType === 'Pb95' ? regionalPrices.PL.pricePb95 : regionalPrices.PL.priceON;
+                  const neighborPrice = fuelType === 'Pb95' ? neighbor.pricePb95 : neighbor.priceON;
+                  const delta = neighborPrice - polandPrice;
+                  const isMoreExpensive = delta > 0;
+                  const flag = { DE: '🇩🇪', CZ: '🇨🇿', SK: '🇸🇰', LT: '🇱🇹' }[code as 'DE' | 'CZ' | 'SK' | 'LT'];
+                  return (
+                    <div key={code} className="flex justify-between items-center text-sm">
+                      <span className="text-slate-500">Różnica vs {flag} {neighbor.name}</span>
+                      <span className={cn("font-bold", isMoreExpensive ? 'text-red-500' : 'text-emerald-600')}>
+                        {isMoreExpensive ? `+${delta.toFixed(2)}` : delta.toFixed(2)} zł
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Neighbor Cards */}
+            <div className="lg:col-span-3 grid grid-cols-2 gap-4">
+              {['DE', 'CZ', 'SK', 'LT'].map(code => {
+                const neighbor = regionalPrices[code];
+                const neighborPrice = fuelType === 'Pb95' ? neighbor.pricePb95 : neighbor.priceON;
+                const flag = { DE: '🇩🇪', CZ: '🇨🇿', SK: '🇸🇰', LT: '🇱🇹' }[code as 'DE' | 'CZ' | 'SK' | 'LT'];
+                return (
+                  <div key={code} className="bg-white border border-slate-100 rounded-2xl p-4 flex flex-col justify-between hover:shadow-lg transition-shadow">
+                    <div className="flex items-center justify-between mb-3"><div className="flex items-center gap-2"><span className="text-2xl">{flag}</span><h4 className="font-bold text-slate-700">{neighbor.name}</h4></div></div>
+                    <div className="text-right"><span className="text-2xl font-bold text-slate-800">{neighborPrice.toFixed(2)}</span><span className="ml-1 text-xs font-medium text-slate-400">PLN/l</span></div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          {regionalPricesError && <p className="text-xs text-red-500 mt-4 text-center">{regionalPricesError}</p>}
+          <p className="text-[10px] text-slate-400 mt-6 text-right">Źródło: www.e-petrol.pl/notowania/rynki-zagraniczne/stacje-paliw-europa, aktualizacja w każdą środę do godz. 15:00.</p>
         </div>
 
         {/* Info Section */}
