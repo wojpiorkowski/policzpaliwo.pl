@@ -1,28 +1,28 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { 
-  LineChart, 
-  Line, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer, 
-  AreaChart, 
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
   Area,
   ReferenceLine,
   BarChart,
   Bar,
   Cell
 } from 'recharts';
-import { 
-  Fuel, 
-  TrendingUp, 
-  DollarSign, 
+import {
+  Fuel,
+  TrendingUp,
+  DollarSign,
   Droplets,
-  Info, 
-  Calculator, 
-  History, 
-  ArrowRight, 
+  Info,
+  Calculator,
+  History,
+  ArrowRight,
   AlertCircle,
   RefreshCw,
   Globe,
@@ -112,16 +112,16 @@ const HISTORICAL_DATA: HistoricalData[] = [
 ];
 
 const refineryHistory = [
-  { year: '2016', q: [5.8, 5.2, 4.9, 4.5] },
-  { year: '2017', q: [5.1, 6.1, 6.5, 5.9] },
-  { year: '2018', q: [4.8, 5.5, 6.2, 5.5] },
-  { year: '2019', q: [4.9, 4.6, 4.2, 3.9] },
-  { year: '2020', q: [3.2, 1.1, 1.8, 2.3] },
-  { year: '2021', q: [2.5, 3.5, 5.8, 7.4] },
-  { year: '2022', q: [7.8, 20.5, 35.2, 45.3] },
-  { year: '2023', q: [21.2, 15.5, 14.8, 14.1] },
-  { year: '2024', q: [13.5, 14.1, 10.3, 13.3] },
-  { year: '2025', q: [11.2, 10.5, 10.0, 10.3] },
+  { year: '2016', q: [5.3, 6.0, 4.3, 5.8] },
+  { year: '2017', q: [5.3, 6.9, 7.9, 5.3] },
+  { year: '2018', q: [4.0, 5.2, 6.3, 4.8] },
+  { year: '2019', q: [4.4, 6.0, 7.2, 3.2] },
+  { year: '2020', q: [3.4, 3.2, 1.2, 1.0] },
+  { year: '2021', q: [0.5, 1.5, 3.1, 4.5] },
+  { year: '2022', q: [6.0, 26.5, 16.4, 22.0] },
+  { year: '2023', q: [18.3, 13.8, 21.9, 13.9] },
+  { year: '2024', q: [16.0, 12.6, 7.7, 7.7] },
+  { year: '2025', q: [8.7, 11.3, 15.2, 16.9] },
   { year: '2026', q: [10.5, null, null, null], current: 10.8 }
 ];
 
@@ -139,6 +139,146 @@ const logisticsHistory = [
   { year: '2026', q: [0.43, null, null, null], current: 0.40 }
 ];
 
+const retailHistory = [
+  { year: '2016', q: [0.14, 0.16, 0.18, 0.20] },
+  { year: '2017', q: [0.15, 0.17, 0.19, 0.17] },
+  { year: '2018', q: [0.16, 0.18, 0.21, 0.17] },
+  { year: '2019', q: [0.18, 0.20, 0.22, 0.12] },
+  { year: '2020', q: [0.22, 0.45, 0.24, 0.19] },
+  { year: '2021', q: [0.14, 0.16, 0.18, 0.16] },
+  { year: '2022', q: [0.12, 0.08, 0.04, 0.24] },
+  { year: '2023', q: [0.18, 0.22, 0.14, 0.02] },
+  { year: '2024', q: [0.15, 0.16, 0.14, 0.15] },
+  { year: '2025', q: [0.16, 0.17, 0.16, 0.15] },
+  { year: '2026', q: [0.18, null, null, null], current: 0.22 }
+];
+
+const exciseHistory = [
+  { year: '2016', q: [1.54, 1.54, 1.54, 1.54] },
+  { year: '2017', q: [1.54, 1.54, 1.54, 1.54] },
+  { year: '2018', q: [1.54, 1.54, 1.54, 1.54] },
+  { year: '2019', q: [1.54, 1.54, 1.54, 1.54] },
+  { year: '2020', q: [1.54, 1.52, 1.52, 1.52] },
+  { year: '2021', q: [1.52, 1.52, 1.52, 1.52] },
+  { year: '2022', q: [1.37, 1.41, 1.41, 1.41] }, // Tarcza Antyinflacyjna
+  { year: '2023', q: [1.53, 1.53, 1.53, 1.53] },
+  { year: '2024', q: [1.53, 1.53, 1.53, 1.53] },
+  { year: '2025', q: [1.53, 1.53, 1.53, 1.53] },
+  { year: '2026', q: [1.53, null, null, null], current: 1.53 }
+];
+
+const dieselExciseHistory = [
+  { year: '2016', q: [1.17, 1.17, 1.17, 1.17] },
+  { year: '2017', q: [1.17, 1.17, 1.17, 1.17] },
+  { year: '2018', q: [1.17, 1.17, 1.17, 1.17] },
+  { year: '2019', q: [1.17, 1.17, 1.17, 1.17] },
+  { year: '2020', q: [1.15, 1.15, 1.15, 1.15] },
+  { year: '2021', q: [1.15, 1.15, 1.15, 1.15] },
+  { year: '2022', q: [1.10, 1.14, 1.14, 1.14] },
+  { year: '2023', q: [1.16, 1.16, 1.16, 1.16] },
+  { year: '2024', q: [1.16, 1.16, 1.16, 1.16] },
+  { year: '2025', q: [1.16, 1.16, 1.16, 1.16] },
+  { year: '2026', q: [1.16, null, null, null], current: 1.16 }
+];
+
+const brentHistory = [
+  { year: '2016', q: [34.74, 48.13, 42.46, 48.30] },
+  { year: '2017', q: [55.70, 51.73, 52.65, 61.37] },
+  { year: '2018', q: [67.78, 75.92, 74.16, 74.84] },
+  { year: '2019', q: [62.46, 72.19, 64.07, 59.30] },
+  { year: '2020', q: [57.77, 18.11, 43.13, 36.33] }, // COVID-19
+  { year: '2021', q: [55.25, 67.73, 77.72, 83.10] },
+  { year: '2022', q: [92.35, 108.36, 111.51, 93.30] },
+  { year: '2023', q: [83.42, 81.32, 85.22, 86.82] },
+  { year: '2024', q: [82.98, 88.23, 81.39, 73.25] },
+  { year: '2025', q: [77.11, 63.37, 73.43, 65.44] },
+  { year: '2026', q: [101.04, null, null, null], current: 101.04 }
+];
+
+const usdPlnHistory = [
+  { year: '2016', q: [4.05, 3.95, 3.90, 3.85] },
+  { year: '2017', q: [4.10, 3.95, 3.70, 3.65] },
+  { year: '2018', q: [3.45, 3.40, 3.70, 3.75] },
+  { year: '2019', q: [3.75, 3.80, 3.85, 3.95] },
+  { year: '2020', q: [3.80, 4.20, 3.95, 3.90] },
+  { year: '2021', q: [3.75, 3.80, 3.90, 4.00] },
+  { year: '2022', q: [4.05, 4.30, 4.75, 4.85] }, // Wojna na Ukrainie i kryzys energetyczny
+  { year: '2023', q: [4.40, 4.20, 4.05, 4.25] },
+  { year: '2024', q: [4.00, 4.05, 3.95, 4.05] },
+  { year: '2025', q: [4.00, 3.85, 3.95, 4.05] },
+  { year: '2026', q: [3.65, null, null, null], current: 3.65 }
+];
+
+const surchargeHistory = [
+  { year: '2016', q: [0.13, 0.13, 0.13, 0.13] },
+  { year: '2017', q: [0.13, 0.13, 0.13, 0.13] },
+  { year: '2018', q: [0.13, 0.13, 0.13, 0.13] },
+  { year: '2019', q: [0.13, 0.13, 0.13, 0.13] },
+  { year: '2020', q: [0.15, 0.15, 0.15, 0.15] },
+  { year: '2021', q: [0.16, 0.16, 0.16, 0.16] },
+  { year: '2022', q: [0.15, 0.15, 0.15, 0.15] },
+  { year: '2023', q: [0.17, 0.17, 0.17, 0.17] },
+  { year: '2024', q: [0.19, 0.19, 0.19, 0.19] },
+  { year: '2025', q: [0.20, 0.20, 0.20, 0.20] },
+  { year: '2026', q: [0.21, null, null, null], current: 0.21 }
+];
+
+const dieselSurchargeHistory = [
+  { year: '2016', q: [0.29, 0.29, 0.29, 0.29] },
+  { year: '2017', q: [0.29, 0.29, 0.29, 0.29] },
+  { year: '2018', q: [0.29, 0.29, 0.29, 0.29] },
+  { year: '2019', q: [0.30, 0.30, 0.30, 0.30] },
+  { year: '2020', q: [0.31, 0.31, 0.31, 0.31] },
+  { year: '2021', q: [0.33, 0.33, 0.33, 0.33] },
+  { year: '2022', q: [0.30, 0.30, 0.30, 0.30] }, // Okres obniżki w Tarczy
+  { year: '2023', q: [0.35, 0.35, 0.35, 0.35] },
+  { year: '2024', q: [0.39, 0.39, 0.39, 0.39] },
+  { year: '2025', q: [0.41, 0.41, 0.41, 0.41] },
+  { year: '2026', q: [0.44, null, null, null], current: 0.44 }
+];
+
+const strategicReserveHistory = [
+  { year: '2016', q: [0.04, 0.04, 0.04, 0.04] },
+  { year: '2017', q: [0.04, 0.04, 0.04, 0.04] },
+  { year: '2018', q: [0.04, 0.04, 0.04, 0.04] },
+  { year: '2019', q: [0.04, 0.04, 0.04, 0.04] },
+  { year: '2020', q: [0.04, 0.04, 0.04, 0.04] },
+  { year: '2021', q: [0.04, 0.04, 0.04, 0.04] },
+  { year: '2022', q: [0.04, 0.04, 0.04, 0.04] },
+  { year: '2023', q: [0.04, 0.04, 0.04, 0.04] },
+  { year: '2024', q: [0.10, 0.10, 0.10, 0.10] }, // Skokowa zmiana stawki
+  { year: '2025', q: [0.10, 0.10, 0.10, 0.10] },
+  { year: '2026', q: [0.10, null, null, null], current: 0.10 }
+];
+
+const emissionFeeHistory = [
+  { year: '2016', q: [0.00, 0.00, 0.00, 0.00] },
+  { year: '2017', q: [0.00, 0.00, 0.00, 0.00] },
+  { year: '2018', q: [0.00, 0.00, 0.00, 0.00] },
+  { year: '2019', q: [0.08, 0.08, 0.08, 0.08] }, // Rok wprowadzenia opłaty
+  { year: '2020', q: [0.08, 0.08, 0.08, 0.08] },
+  { year: '2021', q: [0.08, 0.08, 0.08, 0.08] },
+  { year: '2022', q: [0.08, 0.08, 0.08, 0.08] },
+  { year: '2023', q: [0.08, 0.08, 0.08, 0.08] },
+  { year: '2024', q: [0.08, 0.08, 0.08, 0.08] },
+  { year: '2025', q: [0.08, 0.08, 0.08, 0.08] },
+  { year: '2026', q: [0.08, null, null, null], current: 0.08 }
+];
+
+const vatHistory = [
+  { year: '2016', q: [23, 23, 23, 23] },
+  { year: '2017', q: [23, 23, 23, 23] },
+  { year: '2018', q: [23, 23, 23, 23] },
+  { year: '2019', q: [23, 23, 23, 23] },
+  { year: '2020', q: [23, 23, 23, 23] },
+  { year: '2021', q: [23, 23, 23, 23] },
+  { year: '2022', q: [23, 8, 8, 8] }, // Okres Tarczy Antyinflacyjnej (od lutego)
+  { year: '2023', q: [23, 23, 23, 23] },
+  { year: '2024', q: [23, 23, 23, 23] },
+  { year: '2025', q: [23, 23, 23, 23] },
+  { year: '2026', q: [23, null, null, null], current: 23 }
+];
+
 // --- Components ---
 
 const StatCard = ({ title, value, unit, icon: Icon, description, variant = 'default', badge, tooltip, extra }: any) => {
@@ -154,7 +294,7 @@ const StatCard = ({ title, value, unit, icon: Icon, description, variant = 'defa
   const theme = variants[variant] || variants.default;
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow relative"
@@ -177,7 +317,7 @@ const StatCard = ({ title, value, unit, icon: Icon, description, variant = 'defa
         <span className={cn("text-2xl font-bold", theme.valueText)}>{value}</span>
         <span className="text-sm font-medium text-slate-400">{unit}</span>
       </div>
-      
+
       {extra && (
         <div className="mt-1 mb-2">
           {extra}
@@ -310,20 +450,20 @@ const ModelAssumptionsModal = ({ isOpen, onClose, fuelType }: { isOpen: boolean,
               Założenia modelu
             </h2>
             <div className="space-y-3 text-sm text-slate-600 max-h-[60vh] overflow-y-auto pr-3 -mr-3">
-                <p>
-                    Szacowana cena z modelu stanowi analityczny punkt odniesienia (benchmark). Odzwierciedla ona teoretyczny poziom cen paliw przy założeniu długoterminowej równowagi rynkowej oraz standardowej efektywności kosztowej w łańcuchu dostaw. Model opiera się na 10-letnich danych historycznych, poddanych korekcie o wskaźniki makroekonomiczne.
-                </p>
-                <p className="font-bold pt-2">
-                    Kalkulacja opiera się na czterech filarach:
-                </p>
-                <ol className="list-decimal list-inside space-y-3 pl-2">
-                    <li><strong>Baza surowcowa i przerób (Crack Spread):</strong> Fundamentem wyliczeń są bieżące notowania ropy Brent, do których doliczana jest historyczna marża rafineryjna na poziomie 10 USD/bbl. Wartość ta stanowi średnią z lat 2016–2025, obejmującą pełen cykl koniunkturalny. Zastosowanie dolara amerykańskiego (USD) jest zgodne z globalnym standardem wyceny produktów naftowych i izoluje marżę produkcyjną od lokalnych wahań kursowych.</li>
-                    <li><strong>Urealnione koszty dystrybucji i marża detaliczna:</strong> Model przyjmuje koszty logistyki i blendingu na poziomie 0,40 PLN/l oraz marżę detaliczną stacji paliw w wysokości 0,22 PLN/l. Wartości te zostały wyznaczone na podstawie rocznych raportów branżowych POPiHN z dekady 2016–2025. W celu zachowania rzetelności ekonomicznej, historyczne marże z poszczególnych lat zostały zwaloryzowane wskaźnikiem skumulowanej inflacji konsumenckiej (CPI) według danych GUS. Dzięki temu benchmark uwzględnia współczesne, realne koszty operacyjne stacji (m.in. koszty pracy i nośników energii).</li>
-                    <li><strong>Obciążenia fiskalne i pozafiskalne:</strong> Do urealnionej ceny bazowej doliczane są sztywne, kwotowe obciążenia narzucone przez państwo: podatek akcyzowy, opłata paliwowa, opłata zapasowa oraz opłata emisyjna. Ich stawki wynikają z aktualnie obowiązujących obwieszczeń Ministerstwa Finansów.</li>
-                    <li><strong>Podatek od towarów i usług (VAT):</strong> Finalnym etapem kalkulacji jest aplikacja obowiązującej stawki podatku VAT (23%) do sumy wszystkich składowych netto, co pozwala uzyskać szacowaną cenę detaliczną brutto.</li>
-                </ol>
-                <p className="font-bold pt-2">Interpretacja wyników:</p>
-                <p>Różnica między aktualną średnią ceną rynkową a wyznaczoną ceną szacunkową wskazuje poziom anomalii rynkowej – najczęściej wynikającej z absorpcji nadmiarowych marż (tzw. premii rynkowej) przez sektor naftowy.</p>
+              <p>
+                Szacowana cena z modelu stanowi analityczny punkt odniesienia (benchmark). Odzwierciedla ona teoretyczny poziom cen paliw przy założeniu długoterminowej równowagi rynkowej oraz standardowej efektywności kosztowej w łańcuchu dostaw. Model opiera się na 10-letnich danych historycznych, poddanych korekcie o wskaźniki makroekonomiczne.
+              </p>
+              <p className="font-bold pt-2">
+                Kalkulacja opiera się na czterech filarach:
+              </p>
+              <ol className="list-decimal list-inside space-y-3 pl-2">
+                <li><strong>Baza surowcowa i przerób (Crack Spread):</strong> Fundamentem wyliczeń są bieżące notowania ropy Brent, do których doliczana jest historyczna marża rafineryjna na poziomie 10 USD/bbl. Wartość ta stanowi średnią z lat 2016–2025, obejmującą pełen cykl koniunkturalny. Zastosowanie dolara amerykańskiego (USD) jest zgodne z globalnym standardem wyceny produktów naftowych i izoluje marżę produkcyjną od lokalnych wahań kursowych.</li>
+                <li><strong>Urealnione koszty dystrybucji i marża detaliczna:</strong> Model przyjmuje koszty logistyki i blendingu na poziomie 0,40 PLN/l oraz marżę detaliczną stacji paliw w wysokości 0,22 PLN/l. Wartości te zostały wyznaczone na podstawie rocznych raportów branżowych POPiHN z dekady 2016–2025. W celu zachowania rzetelności ekonomicznej, historyczne marże z poszczególnych lat zostały zwaloryzowane wskaźnikiem skumulowanej inflacji konsumenckiej (CPI) według danych GUS. Dzięki temu benchmark uwzględnia współczesne, realne koszty operacyjne stacji (m.in. koszty pracy i nośników energii).</li>
+                <li><strong>Obciążenia fiskalne i pozafiskalne:</strong> Do urealnionej ceny bazowej doliczane są sztywne, kwotowe obciążenia narzucone przez państwo: podatek akcyzowy, opłata paliwowa, opłata zapasowa oraz opłata emisyjna. Ich stawki wynikają z aktualnie obowiązujących obwieszczeń Ministerstwa Finansów.</li>
+                <li><strong>Podatek od towarów i usług (VAT):</strong> Finalnym etapem kalkulacji jest aplikacja obowiązującej stawki podatku VAT (23%) do sumy wszystkich składowych netto, co pozwala uzyskać szacowaną cenę detaliczną brutto.</li>
+              </ol>
+              <p className="font-bold pt-2">Interpretacja wyników:</p>
+              <p>Różnica między aktualną średnią ceną rynkową a wyznaczoną ceną szacunkową wskazuje poziom anomalii rynkowej – najczęściej wynikającej z absorpcji nadmiarowych marż (tzw. premii rynkowej) przez sektor naftowy.</p>
             </div>
             <button onClick={onClose} className={cn(
               "mt-6 w-full font-bold py-3 px-4 rounded-xl transition-colors",
@@ -350,7 +490,7 @@ export default function App() {
   const [emissionFeeInput, setEmissionFeeInput] = useState(0.08);
   const [retailMarginInput, setRetailMarginInput] = useState(0.22);
   const [vatInput, setVatInput] = useState(23);
-  
+
   const [fuelType, setFuelType] = useState<'Pb95' | 'ON'>('Pb95');
   const [realTimeData, setRealTimeData] = useState<{ brent: number, usdPln: number, retailPb95: number, retailON: number, timestamp?: string, sourceUrl?: string } | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -359,6 +499,14 @@ export default function App() {
   const [isModelAssumptionsModalOpen, setIsModelAssumptionsModalOpen] = useState(false);
   const [showRefineryTooltip, setShowRefineryTooltip] = useState(false);
   const [showLogisticsTooltip, setShowLogisticsTooltip] = useState(false);
+  const [showRetailTooltip, setShowRetailTooltip] = useState(false);
+  const [showExciseTooltip, setShowExciseTooltip] = useState(false);
+  const [showBrentTooltip, setShowBrentTooltip] = useState(false);
+  const [showUsdPlnTooltip, setShowUsdPlnTooltip] = useState(false);
+  const [showSurchargeTooltip, setShowSurchargeTooltip] = useState(false);
+  const [showStrategicReserveTooltip, setShowStrategicReserveTooltip] = useState(false);
+  const [showEmissionFeeTooltip, setShowEmissionFeeTooltip] = useState(false);
+  const [showVatTooltip, setShowVatTooltip] = useState(false);
 
   useEffect(() => {
     const checkApiKey = async (retries = 3) => {
@@ -389,15 +537,15 @@ export default function App() {
   };
 
   const calculatePrice = (
-    brent: number, 
-    usdPln: number, 
-    refineryMargin: number, 
-    logistics: number, 
-    excise: number, 
-    fuelFee: number, 
-    reserveFee: number, 
-    emissionFee: number, 
-    retailMargin: number, 
+    brent: number,
+    usdPln: number,
+    refineryMargin: number,
+    logistics: number,
+    excise: number,
+    fuelFee: number,
+    reserveFee: number,
+    emissionFee: number,
+    retailMargin: number,
     vat: number
   ) => {
     const rawOilPricePlnL = (brent / 159) * usdPln;
@@ -436,14 +584,14 @@ export default function App() {
     const rawOilPricePlnL = (brentInput / 159) * usdPlnInput;
     const refMarginPlnL = (refineryMarginInput / 159) * usdPlnInput;
     const basePricePlnL = rawOilPricePlnL + refMarginPlnL;
-    
+
     const sumWithoutRetailMargin = basePricePlnL + logisticsInput + exciseInput + fuelFeeInput + reserveFeeInput + emissionFeeInput;
-    
+
     const retailMarginAmount = retailMarginInput;
     const priceWithRetailMargin = sumWithoutRetailMargin + retailMarginAmount;
-    
+
     const vatAmount = priceWithRetailMargin * (vatInput / 100);
-    
+
     const taxesNet = exciseInput + fuelFeeInput + reserveFeeInput + emissionFeeInput;
     const totalTaxes = taxesNet + vatAmount;
     const marginsAndLogistics = refMarginPlnL + logisticsInput + retailMarginAmount;
@@ -460,12 +608,12 @@ export default function App() {
     const rawOilPricePlnL = (brentInput / 159) * usdPlnInput;
     const refMarginPlnL = (refineryMarginInput / 159) * usdPlnInput;
     const basePricePlnL = rawOilPricePlnL + refMarginPlnL;
-    
+
     const sumWithoutRetailMargin = basePricePlnL + logisticsInput + exciseInput + fuelFeeInput + reserveFeeInput + emissionFeeInput;
-    
+
     const retailMarginAmount = retailMarginInput;
     const priceWithRetailMargin = sumWithoutRetailMargin + retailMarginAmount;
-    
+
     const vatAmount = priceWithRetailMargin * (vatInput / 100);
 
     return [
@@ -485,14 +633,76 @@ export default function App() {
     if (!realTimeData) return null;
     const retail = fuelType === 'Pb95' ? realTimeData.retailPb95 : realTimeData.retailON;
     const diffPercent = ((retail - baseCalculatedPrice) / baseCalculatedPrice) * 100;
-    
+
     return {
-      text: diffPercent > 0 
-        ? `+${Math.abs(diffPercent).toFixed(1)}%` 
+      text: diffPercent > 0
+        ? `+${Math.abs(diffPercent).toFixed(1)}%`
         : `-${Math.abs(diffPercent).toFixed(1)}%`,
       type: diffPercent > 0 ? 'danger' : 'success'
     };
   }, [realTimeData, fuelType, baseCalculatedPrice]);
+
+  const chartData = useMemo(() => {
+    const getQuarterIndex = (month: string): number => {
+      switch (month) {
+        case '01':
+        case '03':
+          return 0;
+        case '04':
+          return 1;
+        case '07':
+          return 2;
+        case '10':
+          return 3;
+        default:
+          return 0;
+      }
+    };
+
+    const findHistoryValue = (history: any[], year: string, quarterIndex: number) => {
+      const yearData = history.find(h => h.year === year);
+      if (!yearData) return null;
+
+      const value = yearData.q[quarterIndex];
+      if (value !== null && value !== undefined) {
+        return value;
+      }
+
+      const lastYearData = history[history.length - 1];
+      if (year === lastYearData.year && lastYearData.current !== undefined) {
+        return lastYearData.current;
+      }
+
+      return null;
+    };
+
+    return HISTORICAL_DATA.map(dataPoint => {
+      const [year, month] = dataPoint.date.split('-');
+      const qIndex = getQuarterIndex(month);
+
+      const brent = dataPoint.brent;
+      const usdPln = dataPoint.usdPln;
+
+      const refineryMargin = findHistoryValue(refineryHistory, year, qIndex);
+      const logistics = findHistoryValue(logisticsHistory, year, qIndex);
+      const retailMargin = findHistoryValue(retailHistory, year, qIndex);
+      const excise = findHistoryValue(fuelType === 'Pb95' ? exciseHistory : dieselExciseHistory, year, qIndex);
+      const fuelFee = findHistoryValue(fuelType === 'Pb95' ? surchargeHistory : dieselSurchargeHistory, year, qIndex);
+      const reserveFee = findHistoryValue(strategicReserveHistory, year, qIndex);
+      const emissionFee = findHistoryValue(emissionFeeHistory, year, qIndex);
+      const vat = findHistoryValue(vatHistory, year, qIndex);
+
+      if ([refineryMargin, logistics, retailMargin, excise, fuelFee, reserveFee, emissionFee, vat].some(v => v === null)) {
+        return { ...dataPoint, benchmarkPrice: null };
+      }
+
+      const rawOilPricePlnL = ((brent + refineryMargin!) / 159) * usdPln;
+      const sumNetto = rawOilPricePlnL + logistics! + retailMargin! + excise! + fuelFee! + reserveFee! + emissionFee!;
+      const benchmarkPrice = sumNetto * (1 + vat! / 100);
+
+      return { ...dataPoint, benchmarkPrice: benchmarkPrice };
+    });
+  }, [fuelType]);
 
   const fetchRealTimeData = async (retryCount = 0) => {
     setIsLoading(true);
@@ -507,7 +717,7 @@ export default function App() {
 
       // Use process.env.API_KEY if a custom key is selected, otherwise fallback to GEMINI_API_KEY
       const apiKey = (currentHasCustomKey && process.env.API_KEY) ? process.env.API_KEY : import.meta.env.VITE_GEMINI_API_KEY;
-      
+
       if (!apiKey) {
         throw new Error("Brak klucza API Gemini. Podłącz klucz, aby pobrać aktualne dane.");
       }
@@ -548,7 +758,7 @@ export default function App() {
     } catch (err: any) {
       console.error(err);
       let errorMessage = err.message || "Wystąpił nieoczekiwany błąd.";
-      
+
       // Try to parse JSON error from API
       try {
         const parsed = JSON.parse(errorMessage);
@@ -626,7 +836,7 @@ export default function App() {
           </div>
           <div className="w-full md:w-auto flex justify-center order-last md:order-none">
             <div className="bg-slate-100 p-1 rounded-xl flex gap-1 border border-slate-200">
-              <button 
+              <button
                 onClick={() => {
                   setFuelType('Pb95');
                   setExciseInput(1.50);
@@ -639,11 +849,11 @@ export default function App() {
               >
                 Benzyna Pb95
               </button>
-              <button 
+              <button
                 onClick={() => {
                   setFuelType('ON');
                   setExciseInput(1.16);
-                  setFuelFeeInput(0.42);
+                  setFuelFeeInput(0.44);
                 }}
                 className={cn(
                   "px-6 py-2 rounded-lg text-sm font-bold transition-all",
@@ -652,7 +862,7 @@ export default function App() {
               >
                 Diesel ON
               </button>
-          </div>
+            </div>
           </div>
           <a href="https://fundacjapro.org/" target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-opacity md:order-last">
             <img
@@ -661,19 +871,19 @@ export default function App() {
               className="h-8 md:h-14 w-auto"
             />
           </a>
-      </div>
+        </div>
       </header>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Real-time Stats */}
         <div className="space-y-4 mb-8">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className={cn(
               "p-8 sm:p-10 rounded-[2rem] text-white shadow-2xl relative overflow-hidden",
-              fuelType === 'Pb95' 
-                ? "bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-900" 
+              fuelType === 'Pb95'
+                ? "bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-900"
                 : "bg-gradient-to-br from-slate-800 via-slate-900 to-black"
             )}
           >
@@ -681,7 +891,7 @@ export default function App() {
             <div className="absolute -top-24 -right-16 text-white/5 rotate-12 pointer-events-none">
               <Fuel className="w-96 h-96" />
             </div>
-            
+
             <div className="relative z-10">
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-white/80 font-bold uppercase tracking-widest text-xs sm:text-sm">
@@ -694,8 +904,8 @@ export default function App() {
                 <div className="flex flex-col md:pr-10">
                   <div className="flex items-center gap-2 mb-3">
                     <Zap className="w-5 h-5 text-emerald-400" />
-                    <h3 className="text-lg font-medium text-white/90">Szacowana cena z modelu</h3>                    
-                    <button 
+                    <h3 className="text-lg font-medium text-white/90">Szacowana cena z modelu</h3>
+                    <button
                       onClick={() => setIsModelAssumptionsModalOpen(true)}
                       className="ml-2 text-xs font-bold text-white/60 hover:text-white hover:bg-white/10 py-1 px-3 rounded-lg transition-all duration-200 border border-white/20 hover:border-white/30"
                     >
@@ -712,7 +922,7 @@ export default function App() {
                     Cena wyliczona na podstawie aktualnych notowań ropy i walut przy stałych, standardowych stawkach podatków i opłat.
                   </p>
                 </div>
-                
+
                 {/* Right side - Real market */}
                 <div className="flex flex-col pt-10 md:pt-0 md:pl-10">
                   <div className="flex flex-wrap items-center gap-4 mb-3">
@@ -723,8 +933,8 @@ export default function App() {
                     {marketComparison && (
                       <div className={cn(
                         "px-4 py-1.5 rounded-full font-black uppercase tracking-wider border flex items-baseline gap-1.5 shadow-lg",
-                        marketComparison.type === 'danger' 
-                          ? "bg-red-500/30 text-red-400 border-red-500/50" 
+                        marketComparison.type === 'danger'
+                          ? "bg-red-500/30 text-red-400 border-red-500/50"
                           : "bg-emerald-500/30 text-emerald-100 border-emerald-500/50"
                       )}>
                         <span className="text-xl sm:text-2xl">{marketComparison.text}</span>
@@ -759,7 +969,7 @@ export default function App() {
                 </div>
                 <h2 className="text-xl font-bold">Aktualne czynniki rynkowe</h2>
               </div>
-              <button 
+              <button
                 onClick={fetchRealTimeData}
                 disabled={isLoading}
                 className={cn(
@@ -814,27 +1024,27 @@ export default function App() {
             {(error.includes("Quota") || error.includes("Klucz API")) && (
               <div className="ml-8 flex flex-col gap-2">
                 <p className="text-xs opacity-80">
-                  {error.includes("Quota") 
+                  {error.includes("Quota")
                     ? "Darmowe limity Gemini zostały wyczerpane. Aby korzystać z aplikacji bez ograniczeń, podłącz własny klucz API z włączonym bilingiem."
                     : "Obecny klucz API nie działa lub jest nieprawidłowy. Podłącz własny klucz API Gemini, aby korzystać z aplikacji."}
                 </p>
                 <div className="flex gap-3">
-                  <button 
+                  <button
                     onClick={fetchRealTimeData}
                     className="text-xs font-bold underline hover:no-underline flex items-center gap-1"
                   >
                     Spróbuj ponownie <RefreshCw className="w-3 h-3" />
                   </button>
-                  <button 
+                  <button
                     onClick={handleSelectKey}
                     className="text-xs font-bold underline hover:no-underline"
                   >
                     Podłącz klucz teraz
                   </button>
                   {error.includes("Quota") && (
-                    <a 
-                      href="https://ai.google.dev/gemini-api/docs/billing" 
-                      target="_blank" 
+                    <a
+                      href="https://ai.google.dev/gemini-api/docs/billing"
+                      target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs font-bold underline hover:no-underline flex items-center gap-1"
                     >
@@ -880,11 +1090,74 @@ export default function App() {
                             <div className="flex items-center gap-2">
                               <s.icon className={cn("w-4 h-4", s.color)} />
                               <label className="text-sm font-semibold text-slate-600">{s.label} ({s.unit})</label>
+                              {s.label === 'Ropa Brent' && (
+                                <button
+                                  onMouseEnter={() => setShowBrentTooltip(true)}
+                                  onMouseLeave={() => setShowBrentTooltip(false)}
+                                  className="text-slate-400 hover:text-blue-500 transition-colors"
+                                >
+                                  <History className="w-4 h-4" />
+                                </button>
+                              )}
+                              {s.label === 'Kurs USD/PLN' && (
+                                <button
+                                  onMouseEnter={() => setShowUsdPlnTooltip(true)}
+                                  onMouseLeave={() => setShowUsdPlnTooltip(false)}
+                                  className="text-slate-400 hover:text-red-500 transition-colors"
+                                >
+                                  <History className="w-4 h-4" />
+                                </button>
+                              )}
                               {s.label === 'Marża Rafineryjna' && (
                                 <button
                                   onMouseEnter={() => setShowRefineryTooltip(true)}
                                   onMouseLeave={() => setShowRefineryTooltip(false)}
                                   className="text-slate-400 hover:text-orange-500 transition-colors"
+                                >
+                                  <History className="w-4 h-4" />
+                                </button>
+                              )}
+                              {s.label === 'Akcyza' && (
+                                <button
+                                  onMouseEnter={() => setShowExciseTooltip(true)}
+                                  onMouseLeave={() => setShowExciseTooltip(false)}
+                                  className="text-slate-400 hover:text-emerald-500 transition-colors"
+                                >
+                                  <History className="w-4 h-4" />
+                                </button>
+                              )}
+                              {s.label === 'Opłata Paliwowa' && (
+                                <button
+                                  onMouseEnter={() => setShowSurchargeTooltip(true)}
+                                  onMouseLeave={() => setShowSurchargeTooltip(false)}
+                                  className="text-slate-400 hover:text-emerald-500 transition-colors"
+                                >
+                                  <History className="w-4 h-4" />
+                                </button>
+                              )}
+                              {s.label === 'Opłata Zapasowa' && (
+                                <button
+                                  onMouseEnter={() => setShowStrategicReserveTooltip(true)}
+                                  onMouseLeave={() => setShowStrategicReserveTooltip(false)}
+                                  className="text-slate-400 hover:text-emerald-500 transition-colors"
+                                >
+                                  <History className="w-4 h-4" />
+                                </button>
+                              )}
+                              {s.label === 'Opłata Emisyjna' && (
+                                <button
+                                  onMouseEnter={() => setShowEmissionFeeTooltip(true)}
+                                  onMouseLeave={() => setShowEmissionFeeTooltip(false)}
+                                  className="text-slate-400 hover:text-emerald-500 transition-colors"
+                                >
+                                  <History className="w-4 h-4" />
+                                </button>
+                              )}
+                              {s.label === 'Stawka VAT' && (
+                                <button
+                                  onMouseEnter={() => setShowVatTooltip(true)}
+                                  onMouseLeave={() => setShowVatTooltip(false)}
+                                  className="text-slate-400 hover:text-purple-500 transition-colors"
                                 >
                                   <History className="w-4 h-4" />
                                 </button>
@@ -898,15 +1171,24 @@ export default function App() {
                                   <History className="w-4 h-4" />
                                 </button>
                               )}
+                              {s.label === 'Marża Detaliczna' && (
+                                <button
+                                  onMouseEnter={() => setShowRetailTooltip(true)}
+                                  onMouseLeave={() => setShowRetailTooltip(false)}
+                                  className="text-slate-400 hover:text-purple-500 transition-colors"
+                                >
+                                  <History className="w-4 h-4" />
+                                </button>
+                              )}
                             </div>
                             <span className={cn("text-lg font-bold", s.color)}>
                               {s.prefix}{s.value.toFixed(s.step >= 1 ? 0 : 2)}{s.suffix}
                             </span>
                           </div>
-                          <input 
-                            type="range" 
-                            min={s.min} 
-                            max={s.max} 
+                          <input
+                            type="range"
+                            min={s.min}
+                            max={s.max}
                             step={s.step}
                             value={s.value}
                             onChange={(e) => s.setter(Number(e.target.value))}
@@ -916,6 +1198,90 @@ export default function App() {
                             <span>{s.prefix}{s.min.toFixed(s.step >= 1 ? 0 : 2)}{s.suffix}</span>
                             <span>{s.prefix}{s.max.toFixed(s.step >= 1 ? 0 : 2)}{s.suffix}</span>
                           </div>
+                          {s.label === 'Ropa Brent' && (
+                            <AnimatePresence>
+                              {showBrentTooltip && (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-white rounded-xl p-4 shadow-2xl z-[100]"
+                                >
+                                  <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Ceny Ropy Brent (USD/bbl)</h4>
+                                  <table className="w-full text-xs text-left">
+                                    <thead>
+                                      <tr className="border-b border-slate-600">
+                                        <th className="py-2 font-semibold text-slate-400">Rok</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {brentHistory.map(item => (
+                                        <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
+                                          <td className={cn("py-1.5 font-medium text-slate-300")}>{item.year}{item.year === '2020' && ''}</td>
+                                          {item.q.map((val, i) => (
+                                            <td key={i} className={cn("py-1.5 text-center font-mono text-white")}>
+                                              {val !== null ? val.toFixed(2) : '-'}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                  <p className="text-[10px] text-slate-400 mt-3 text-right">
+                                    {brentHistory.some(h => h.year === '2020') && <span className="block mb-1">* 2020: Pandemia COVID-19</span>}
+                                    Źródło: Notowania giełdowe
+                                  </p>
+                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          )}
+                          {s.label === 'Kurs USD/PLN' && (
+                            <AnimatePresence>
+                              {showUsdPlnTooltip && (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-white rounded-xl p-4 shadow-2xl z-[100]"
+                                >
+                                  <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Kursu USD/PLN</h4>
+                                  <table className="w-full text-xs text-left">
+                                    <thead>
+                                      <tr className="border-b border-slate-600">
+                                        <th className="py-2 font-semibold text-slate-400">Rok</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {usdPlnHistory.map(item => (
+                                        <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
+                                          <td className={cn("py-1.5 font-medium text-slate-300")}>{item.year}{item.year === '2022' && '*'}</td>
+                                          {item.q.map((val, i) => (
+                                            <td key={i} className={cn("py-1.5 text-center font-mono text-white")}>
+                                              {val !== null ? val.toFixed(2) : '-'}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                  <p className="text-[10px] text-slate-400 mt-3 text-right">
+                                    {usdPlnHistory.some(h => h.year === '2022') && <span className="block mb-1">* 2022: Wojna na Ukrainie i kryzys energetyczny</span>}
+                                    Źródło: Dane NBP, EBC
+                                  </p>
+                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          )}
                           {s.label === 'Marża Rafineryjna' && (
                             <AnimatePresence>
                               {showRefineryTooltip && (
@@ -923,7 +1289,7 @@ export default function App() {
                                   initial={{ opacity: 0, scale: 0.95, y: -10 }}
                                   animate={{ opacity: 1, scale: 1, y: 0 }}
                                   exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-800 text-white rounded-xl p-4 shadow-2xl z-[100]"
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-white rounded-xl p-4 shadow-2xl z-[100]"
                                 >
                                   <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Modelowej Marży Rafineryjnej (USD/bbl)</h4>
                                   <table className="w-full text-xs text-left">
@@ -938,13 +1304,10 @@ export default function App() {
                                     </thead>
                                     <tbody>
                                       {refineryHistory.map(item => (
-                                        <tr key={item.year} className="border-b border-slate-700 last:border-b-0">
-                                          <td className="py-1.5 font-bold text-slate-300">{item.year}</td>
+                                        <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
+                                          <td className="py-1.5 font-medium text-slate-300">{item.year}</td>
                                           {item.q.map((val, i) => (
-                                            <td key={i} className={cn(
-                                              "py-1.5 text-center font-mono",
-                                              val && val > 20 ? "font-extrabold text-amber-400" : "text-slate-300"
-                                            )}>
+                                            <td key={i} className="py-1.5 text-center font-mono text-white">
                                               {val !== null ? val.toFixed(1) : '-'}
                                             </td>
                                           ))}
@@ -952,10 +1315,10 @@ export default function App() {
                                       ))}
                                     </tbody>
                                   </table>
-                                  <p className="text-[10px] text-slate-500 mt-3 text-right">
+                                  <p className="text-[10px] text-slate-400 mt-3 text-right">
                                     Źródło: Dane makro Orlen S.A. (Modelowa Marża Rafineryjna)
                                   </p>
-                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-800" />
+                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
                                 </motion.div>
                               )}
                             </AnimatePresence>
@@ -967,7 +1330,7 @@ export default function App() {
                                   initial={{ opacity: 0, scale: 0.95, y: -10 }}
                                   animate={{ opacity: 1, scale: 1, y: 0 }}
                                   exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-800 text-white rounded-xl p-4 shadow-2xl z-[100]"
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-white rounded-xl p-4 shadow-2xl z-[100]"
                                 >
                                   <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Kosztów Logistycznych (PLN/l)</h4>
                                   <table className="w-full text-xs text-left">
@@ -982,13 +1345,10 @@ export default function App() {
                                     </thead>
                                     <tbody>
                                       {logisticsHistory.map(item => (
-                                        <tr key={item.year} className="border-b border-slate-700 last:border-b-0">
-                                          <td className="py-1.5 font-bold text-slate-300">{item.year}</td>
+                                        <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
+                                          <td className="py-1.5 font-medium text-slate-300">{item.year}</td>
                                           {item.q.map((val, i) => (
-                                            <td key={i} className={cn(
-                                              "py-1.5 text-center font-mono",
-                                              val && val > 0.40 ? "font-extrabold text-amber-400" : "text-slate-300"
-                                            )}>
+                                            <td key={i} className="py-1.5 text-center font-mono text-white">
                                               {val !== null ? val.toFixed(2) : '-'}
                                             </td>
                                           ))}
@@ -996,10 +1356,255 @@ export default function App() {
                                       ))}
                                     </tbody>
                                   </table>
-                                  <p className="text-[10px] text-slate-500 mt-3 text-right">
+                                  <p className="text-[10px] text-slate-400 mt-3 text-right">
                                     Źródło: Raporty roczne POPiHN (Polska Organizacja Przemysłu i Handlu Naftowego)
                                   </p>
-                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-800" />
+                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          )}
+                          {s.label === 'Opłata Paliwowa' && (
+                            <AnimatePresence>
+                              {showSurchargeTooltip && (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-white rounded-xl p-4 shadow-2xl z-[100]"
+                                >
+                                  <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Stawki Opłaty Paliwowej (PLN/l)</h4>
+                                  <table className="w-full text-xs text-left">
+                                    <thead>
+                                      <tr className="border-b border-slate-600">
+                                        <th className="py-2 font-semibold text-slate-400">Rok</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {(fuelType === 'Pb95' ? surchargeHistory : dieselSurchargeHistory).map(item => (
+                                        <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
+                                          <td className={cn("py-1.5 font-medium text-slate-300", item.year === '2022' && fuelType === 'ON' && "text-emerald-400")}>{item.year}{item.year === '2022' && fuelType === 'ON' && '*'}</td>
+                                          {item.q.map((val, i) => (
+                                            <td key={i} className={cn("py-1.5 text-center font-mono text-white", item.year === '2022' && fuelType === 'ON' && "text-emerald-400")}>
+                                              {val !== null ? val.toFixed(2) : '-'}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                  <p className="text-[10px] text-slate-400 mt-3 text-right">{(fuelType === 'Pb95' ? surchargeHistory : dieselSurchargeHistory).some(h => h.year === '2022') && fuelType === 'ON' && <span className="block mb-1 text-emerald-400">* 2022: Okres obniżki w Tarczy Antyinflacyjnej</span>}Źródło: Monitor Polski. </p>
+                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          )}
+                          {s.label === 'Opłata Zapasowa' && (
+                            <AnimatePresence>
+                              {showStrategicReserveTooltip && (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-white rounded-xl p-4 shadow-2xl z-[100]"
+                                >
+                                  <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Stawki Opłaty Zapasowej (PLN/l)</h4>
+                                  <table className="w-full text-xs text-left">
+                                    <thead>
+                                      <tr className="border-b border-slate-600">
+                                        <th className="py-2 font-semibold text-slate-400">Rok</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {strategicReserveHistory.map(item => (
+                                        <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
+                                          <td className={cn("py-1.5 font-medium text-slate-300")}>{item.year}{item.year === '2024' && '*'}</td>
+                                          {item.q.map((val, i) => (
+                                            <td key={i} className={cn("py-1.5 text-center font-mono text-white")}>
+                                              {val !== null ? val.toFixed(2) : '-'}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                  <p className="text-[10px] text-slate-400 mt-3 text-right">
+                                    {strategicReserveHistory.some(h => h.year === '2024') && <span className="block mb-1">* 2024: Skokowa zmiana stawki</span>}
+                                    Źródło: Ustawa o zapasach ropy naftowej oraz Rozporządzenia Ministra Klimatu i Środowiska</p>
+                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          )}
+                          {s.label === 'Opłata Emisyjna' && (
+                            <AnimatePresence>
+                              {showEmissionFeeTooltip && (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-white rounded-xl p-4 shadow-2xl z-[100]"
+                                >
+                                  <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Stawki Opłaty Emisyjnej (PLN/l)</h4>
+                                  <table className="w-full text-xs text-left">
+                                    <thead>
+                                      <tr className="border-b border-slate-600">
+                                        <th className="py-2 font-semibold text-slate-400">Rok</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {emissionFeeHistory.map(item => (
+                                        <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
+                                          <td className={cn("py-1.5 font-medium text-slate-300")}>{item.year}{item.year === '2019' && '*'}</td>
+                                          {item.q.map((val, i) => (
+                                            <td key={i} className={cn("py-1.5 text-center font-mono text-white")}>
+                                              {val !== null ? val.toFixed(2) : '-'}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                  <p className="text-[10px] text-slate-400 mt-3 text-right">
+                                    {emissionFeeHistory.some(h => h.year === '2019') && <span className="block mb-1">* 2019: Rok wprowadzenia opłaty</span>}
+                                    Źródło: Ustawa o biokomponentach i biopaliwach ciekłych (Dz.U. z 2018 r. poz. 1597)</p>
+                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          )}
+                          {s.label === 'Stawka VAT' && (
+                            <AnimatePresence>
+                              {showVatTooltip && (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-white rounded-xl p-4 shadow-2xl z-[100]"
+                                >
+                                  <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Stawki Podatku VAT (%)</h4>
+                                  <table className="w-full text-xs text-left">
+                                    <thead>
+                                      <tr className="border-b border-slate-600">
+                                        <th className="py-2 font-semibold text-slate-400">Rok</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {vatHistory.map(item => (
+                                        <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
+                                          <td className={cn("py-1.5 font-medium text-slate-300")}>{item.year}{item.year === '2022' && '*'}</td>
+                                          {item.q.map((val, i) => (
+                                            <td key={i} className={cn("py-1.5 text-center font-mono text-white")}>
+                                              {val !== null ? val : '-'}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                  <p className="text-[10px] text-slate-400 mt-3 text-right">
+                                    {vatHistory.some(h => h.year === '2022') && <span className="block mb-1">* 2022: Okres Tarczy Antyinflacyjnej (od lutego)</span>}
+                                    Źródło: Ustawa o podatku od towarów i usług (t.j. Dz. U. z 2022 r. poz. 931 ze zm.)</p>
+                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          )}
+                          {s.label === 'Marża Detaliczna' && (
+                            <AnimatePresence>
+                              {showRetailTooltip && (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-white rounded-xl p-4 shadow-2xl z-[100]"
+                                >
+                                  <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Marży Detalicznej (PLN/l)</h4>
+                                  <table className="w-full text-xs text-left">
+                                    <thead>
+                                      <tr className="border-b border-slate-600">
+                                        <th className="py-2 font-semibold text-slate-400">Rok</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {retailHistory.map(item => (
+                                        <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
+                                          <td className="py-1.5 font-medium text-slate-300">{item.year}</td>
+                                          {item.q.map((val, i) => (
+                                            <td key={i} className="py-1.5 text-center font-mono text-white">
+                                              {val !== null ? val.toFixed(2) : '-'}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                  <p className="text-[10px] text-slate-400 mt-3 text-right">
+                                    Źródło: Opracowanie własne na podstawie danych rynkowych i struktur cen POPiHN
+                                  </p>
+                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          )}
+                          {s.label === 'Akcyza' && (
+                            <AnimatePresence>
+                              {showExciseTooltip && (
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                                  exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-white rounded-xl p-4 shadow-2xl z-[100]"
+                                >
+                                  <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Stawki Akcyzy (PLN/l)</h4>
+                                  <table className="w-full text-xs text-left">
+                                    <thead>
+                                      <tr className="border-b border-slate-600">
+                                        <th className="py-2 font-semibold text-slate-400">Rok</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {(fuelType === 'Pb95' ? exciseHistory : dieselExciseHistory).map(item => (
+                                        <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
+                                          <td className={cn("py-1.5 font-medium text-slate-300")}>{item.year}{item.year === '2022' && '*'}</td>
+                                          {item.q.map((val, i) => (
+                                            <td key={i} className={cn("py-1.5 text-center font-mono text-white")}>
+                                              {val !== null ? val.toFixed(2) : '-'}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                  <p className="text-[10px] text-slate-400 mt-3 text-right">
+                                    {(fuelType === 'Pb95' ? exciseHistory : dieselExciseHistory).some(h => h.year === '2022') && <span className="block mb-1">* 2022: Tarcza Antyinflacyjna</span>}
+                                    Źródło: Dziennik Ustaw, Obwieszczenia Ministra Finansów ws. stawek akcyzy
+                                  </p>
+                                  <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
                                 </motion.div>
                               )}
                             </AnimatePresence>
@@ -1012,38 +1617,38 @@ export default function App() {
               </div>
 
               <div className="pt-8 border-t border-slate-100 mt-6">
-                  <div className="bg-slate-50 p-6 rounded-2xl flex flex-col md:flex-row items-center justify-evenly gap-6">
-                    <div className="text-center w-full">
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">SZACOWANA CENA DETALICZNA</p>
-                      <div className="flex items-baseline justify-center gap-2">
-                        <span className={cn(
-                          "text-5xl font-black tracking-tighter",
-                          fuelType === 'Pb95' ? "text-emerald-600" : "text-slate-900"
-                        )}>
-                          {calculatedPrice.toFixed(2)}
-                        </span>
-                        <span className="text-xl font-bold text-slate-400">PLN/l</span>
-                      </div>
+                <div className="bg-slate-50 p-6 rounded-2xl flex flex-col md:flex-row items-center justify-evenly gap-6">
+                  <div className="text-center w-full">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">SZACOWANA CENA DETALICZNA</p>
+                    <div className="flex items-baseline justify-center gap-2">
+                      <span className={cn(
+                        "text-5xl font-black tracking-tighter",
+                        fuelType === 'Pb95' ? "text-emerald-600" : "text-slate-900"
+                      )}>
+                        {calculatedPrice.toFixed(2)}
+                      </span>
+                      <span className="text-xl font-bold text-slate-400">PLN/l</span>
                     </div>
+                  </div>
 
-                    <div className="hidden md:block w-px h-16 bg-slate-200/50" />
-                    <div className="w-full h-px md:hidden bg-slate-200/50" />
+                  <div className="hidden md:block w-px h-16 bg-slate-200/50" />
+                  <div className="w-full h-px md:hidden bg-slate-200/50" />
 
-                    <div className="text-center w-full">
-                      <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">AKTUALNA CENA DETALICZNA</p>
-                      <div className="flex items-baseline justify-center gap-2">
-                        <span className={cn(
-                          "text-5xl font-black tracking-tighter",
-                          fuelType === 'Pb95' ? "text-emerald-600" : "text-slate-900"
-                        )}>
-                          {fuelType === 'Pb95' ? (realTimeData?.retailPb95 || '---') : (realTimeData?.retailON || '---')}
-                        </span>
-                        <span className="text-xl font-bold text-slate-400">PLN/l</span>
-                      </div>
+                  <div className="text-center w-full">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">AKTUALNA CENA DETALICZNA</p>
+                    <div className="flex items-baseline justify-center gap-2">
+                      <span className={cn(
+                        "text-5xl font-black tracking-tighter",
+                        fuelType === 'Pb95' ? "text-emerald-600" : "text-slate-900"
+                      )}>
+                        {fuelType === 'Pb95' ? (realTimeData?.retailPb95 || '---') : (realTimeData?.retailON || '---')}
+                      </span>
+                      <span className="text-xl font-bold text-slate-400">PLN/l</span>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
 
             <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
               <div className="flex items-center gap-3 mb-8">
@@ -1064,26 +1669,26 @@ export default function App() {
                       margin={{ top: 0, right: 30, left: 40, bottom: 0 }}
                     >
                       <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f1f5f9" />
-                      <XAxis 
-                        type="number" 
-                        axisLine={{ stroke: '#e2e8f0' }} 
+                      <XAxis
+                        type="number"
+                        axisLine={{ stroke: '#e2e8f0' }}
                         tickLine={false}
                         tick={{ fontSize: 10, fontWeight: 500, fill: '#64748b' }}
                         tickFormatter={(value) => `${value} zł`}
                       />
-                      <YAxis 
-                        dataKey="name" 
-                        type="category" 
-                        axisLine={{ stroke: '#e2e8f0' }} 
+                      <YAxis
+                        dataKey="name"
+                        type="category"
+                        axisLine={{ stroke: '#e2e8f0' }}
                         tickLine={false}
                         tick={{ fontSize: 10, fontWeight: 600, fill: '#475569' }}
                         width={90}
                       />
                       <Tooltip
                         cursor={{ fill: '#f8fafc' }}
-                        contentStyle={{ 
-                          backgroundColor: '#fff', 
-                          borderRadius: '12px', 
+                        contentStyle={{
+                          backgroundColor: '#fff',
+                          borderRadius: '12px',
                           border: '1px solid #f1f5f9',
                           boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
                           padding: '8px 12px'
@@ -1092,8 +1697,8 @@ export default function App() {
                         formatter={(value: number) => [`${value.toFixed(2)} PLN`, 'Kwota']}
                         labelStyle={{ fontSize: '10px', color: '#64748b', marginBottom: '4px', textTransform: 'uppercase' }}
                       />
-                      <Bar 
-                        dataKey="value" 
+                      <Bar
+                        dataKey="value"
                         radius={[0, 4, 4, 0]}
                         barSize={20}
                       >
@@ -1117,9 +1722,9 @@ export default function App() {
                       <span className="text-slate-900">{priceStructure.taxes.toFixed(1)}%</span>
                     </div>
                     <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-red-500 rounded-full transition-all duration-500" 
-                        style={{ width: `${priceStructure.taxes}%` }} 
+                      <div
+                        className="h-full bg-red-500 rounded-full transition-all duration-500"
+                        style={{ width: `${priceStructure.taxes}%` }}
                       />
                     </div>
                   </div>
@@ -1129,9 +1734,9 @@ export default function App() {
                       <span className="text-slate-900">{priceStructure.raw.toFixed(1)}%</span>
                     </div>
                     <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-blue-500 rounded-full transition-all duration-500" 
-                        style={{ width: `${priceStructure.raw}%` }} 
+                      <div
+                        className="h-full bg-blue-500 rounded-full transition-all duration-500"
+                        style={{ width: `${priceStructure.raw}%` }}
                       />
                     </div>
                   </div>
@@ -1141,9 +1746,9 @@ export default function App() {
                       <span className="text-slate-900">{priceStructure.margins.toFixed(1)}%</span>
                     </div>
                     <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
-                      <div 
-                        className="h-full bg-slate-400 rounded-full transition-all duration-500" 
-                        style={{ width: `${priceStructure.margins}%` }} 
+                      <div
+                        className="h-full bg-slate-400 rounded-full transition-all duration-500"
+                        style={{ width: `${priceStructure.margins}%` }}
                       />
                     </div>
                   </div>
@@ -1177,6 +1782,10 @@ export default function App() {
                     </div>
                   )}
                   <div className="flex items-center gap-1.5">
+                    <div className="w-8 h-0 border-t-2 border-dashed border-amber-500" />
+                    <span className="text-[10px] font-bold text-slate-500 uppercase">Cena Modelowa (Benchmark)</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
                     <div className="w-8 h-0 border-t-2 border-dashed border-blue-400" />
                     <span className="text-[10px] font-bold text-slate-500 uppercase">Ropa Brent (USD/bbl)</span>
                   </div>
@@ -1189,48 +1798,48 @@ export default function App() {
 
               <div className="h-[300px] sm:h-[400px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={HISTORICAL_DATA} margin={{ top: 10, right: 5, left: -20, bottom: 0 }}>
+                  <AreaChart data={chartData} margin={{ top: 10, right: 5, left: -20, bottom: 0 }}>
                     <defs>
                       <linearGradient id="colorPb95" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.15}/>
-                        <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#10b981" stopOpacity={0.15} />
+                        <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
                       </linearGradient>
                       <linearGradient id="colorON" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#0f172a" stopOpacity={0.15}/>
-                        <stop offset="95%" stopColor="#0f172a" stopOpacity={0}/>
+                        <stop offset="5%" stopColor="#0f172a" stopOpacity={0.15} />
+                        <stop offset="95%" stopColor="#0f172a" stopOpacity={0} />
                       </linearGradient>
                     </defs>
                     <CartesianGrid strokeDasharray="3 3" vertical={true} stroke="#f1f5f9" />
-                    <XAxis 
-                      dataKey="date" 
-                      axisLine={{ stroke: '#e2e8f0' }} 
-                      tickLine={true} 
+                    <XAxis
+                      dataKey="date"
+                      axisLine={{ stroke: '#e2e8f0' }}
+                      tickLine={true}
                       tick={{ fontSize: 10, fontWeight: 600, fill: '#475569' }}
                       dy={10}
                       minTickGap={30}
                       tickFormatter={(value) => value.split('-')[0]}
                     />
-                    <YAxis 
+                    <YAxis
                       yAxisId="left"
-                      axisLine={{ stroke: '#e2e8f0' }} 
-                      tickLine={false} 
+                      axisLine={{ stroke: '#e2e8f0' }}
+                      tickLine={false}
                       tick={{ fontSize: 10, fontWeight: 500, fill: '#64748b' }}
                       domain={[3.5, 8.5]}
                       width={40}
                     />
-                    <YAxis 
+                    <YAxis
                       yAxisId="right"
                       orientation="right"
-                      axisLine={{ stroke: '#e2e8f0' }} 
-                      tickLine={false} 
+                      axisLine={{ stroke: '#e2e8f0' }}
+                      tickLine={false}
                       tick={{ fontSize: 10, fontWeight: 500, fill: '#64748b' }}
                       domain={[10, 120]}
                       width={40}
                     />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: '#fff', 
-                        borderRadius: '16px', 
+                    <Tooltip
+                      contentStyle={{
+                        backgroundColor: '#fff',
+                        borderRadius: '16px',
                         border: '1px solid #f1f5f9',
                         boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
                         padding: '12px'
@@ -1244,55 +1853,72 @@ export default function App() {
                         };
                         return `${months[month] || month} ${year}`;
                       }}
+                      formatter={(value: any) => {
+                        if (typeof value === 'number') {
+                          return value.toFixed(2);
+                        }
+                        return value;
+                      }}
                     />
                     {fuelType === 'Pb95' ? (
-                      <Area 
+                      <Area
                         yAxisId="left"
-                        type="monotone" 
-                        dataKey="pricePb95" 
+                        type="monotone"
+                        dataKey="pricePb95"
                         name="Cena Pb95"
-                        stroke="#10b981" 
+                        stroke="#10b981"
                         strokeWidth={3}
-                        fillOpacity={1} 
-                        fill="url(#colorPb95)" 
+                        fillOpacity={1}
+                        fill="url(#colorPb95)"
                         dot={false}
                         activeDot={{ r: 6, strokeWidth: 0, fill: '#10b981' }}
                       />
                     ) : (
-                      <Area 
+                      <Area
                         yAxisId="left"
-                        type="monotone" 
-                        dataKey="priceON" 
+                        type="monotone"
+                        dataKey="priceON"
                         name="Cena ON"
-                        stroke="#0f172a" 
+                        stroke="#0f172a"
                         strokeWidth={3}
-                        fillOpacity={1} 
-                        fill="url(#colorON)" 
+                        fillOpacity={1}
+                        fill="url(#colorON)"
                         dot={false}
                         activeDot={{ r: 6, strokeWidth: 0, fill: '#0f172a' }}
                       />
                     )}
-                    <Line 
+                    <Line
                       yAxisId="right"
-                      type="monotone" 
-                      dataKey="brent" 
+                      type="monotone"
+                      dataKey="brent"
                       name="Ropa Brent"
-                      stroke="#3b82f6" 
+                      stroke="#3b82f6"
                       strokeWidth={2}
                       strokeDasharray="6 4"
                       dot={false}
                       activeDot={{ r: 6, strokeWidth: 0, fill: '#3b82f6' }}
                     />
-                    <Line 
+                    <Line
                       yAxisId="left"
-                      type="monotone" 
-                      dataKey="usdPln" 
+                      type="monotone"
+                      dataKey="usdPln"
                       name="Kurs USD/PLN"
-                      stroke="#ef4444" 
+                      stroke="#ef4444"
                       strokeWidth={2}
                       strokeDasharray="2 2"
                       dot={false}
                       activeDot={{ r: 6, strokeWidth: 0, fill: '#ef4444' }}
+                    />
+                    <Line
+                      yAxisId="left"
+                      type="monotone"
+                      dataKey="benchmarkPrice"
+                      name="Cena Modelowa (Benchmark)"
+                      stroke="#f59e0b"
+                      strokeWidth={2}
+                      strokeDasharray="5 5"
+                      dot={false}
+                      activeDot={{ r: 6, strokeWidth: 0, fill: '#f59e0b' }}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -1314,8 +1940,8 @@ export default function App() {
                     "text-lg md:text-3xl font-bold transition-colors duration-300",
                     fuelType === 'Pb95' ? "text-emerald-600" : "text-slate-900"
                   )}>
-                    {fuelType === 'Pb95' 
-                      ? `${Math.max(7.95, realTimeData?.retailPb95 || 0).toFixed(2)} zł` 
+                    {fuelType === 'Pb95'
+                      ? `${Math.max(7.95, realTimeData?.retailPb95 || 0).toFixed(2)} zł`
                       : `${Math.max(8.08, realTimeData?.retailON || 0).toFixed(2)} zł`}
                   </p>
                 </div>
@@ -1351,9 +1977,9 @@ export default function App() {
               alt="Logo PRO"
               className="h-40 w-auto mt-6 mb-2 opacity-80 hover:opacity-100 transition-opacity"
               referrerPolicy="no-referrer"
-            />            <a 
-              href="https://fundacjapro.org/" 
-              target="_blank" 
+            />            <a
+              href="https://fundacjapro.org/"
+              target="_blank"
               rel="noopener noreferrer"
               className="mt-2 text-xs font-medium text-slate-400 hover:text-slate-500 transition-colors"
             >
