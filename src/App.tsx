@@ -528,7 +528,9 @@ export default function App() {
   const [showStrategicReserveTooltip, setShowStrategicReserveTooltip] = useState(false);
   const [showEmissionFeeTooltip, setShowEmissionFeeTooltip] = useState(false);
   const [showVatTooltip, setShowVatTooltip] = useState(false);
+  const [showRefineryValueTooltip, setShowRefineryValueTooltip] = useState(false);
   const [regionalPrices, setRegionalPrices] = useState<RegionalPrices>(initialRegionalPrices);
+  const [showLogisticsValueTooltip, setShowLogisticsValueTooltip] = useState(false);
   const [regionalPricesLoading, setRegionalPricesLoading] = useState(true);
   const [regionalPricesError, setRegionalPricesError] = useState<string | null>(null);
 
@@ -890,7 +892,7 @@ export default function App() {
     { label: 'Ropa Brent', icon: Globe, color: 'text-blue-600', bg: 'bg-blue-50', accent: 'accent-blue-600', value: brentInput, setter: setBrentInput, min: 10, max: 200, step: 1, unit: 'USD/bbl', prefix: '$', suffix: '' },
     { label: 'Kurs USD/PLN', icon: DollarSign, color: 'text-red-600', bg: 'bg-red-50', accent: 'accent-red-600', value: usdPlnInput, setter: setUsdPlnInput, min: 3.0, max: 5.0, step: 0.01, unit: 'PLN', prefix: '', suffix: ' zł' },
     { label: 'Marża Rafineryjna', icon: TrendingUp, color: 'text-orange-600', bg: 'bg-orange-50', accent: 'accent-orange-600', value: refineryMarginInput, setter: setRefineryMarginInput, min: 2, max: 50, step: 1, unit: 'USD/bbl', prefix: '$', suffix: '' },
-    { label: 'Logistyka i Blending', icon: RefreshCw, color: 'text-slate-600', bg: 'bg-slate-100', accent: 'accent-slate-600', value: logisticsInput, setter: setLogisticsInput, min: 0.1, max: 0.8, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
+    { label: 'Logistyka i Blending (PLN/l)', icon: RefreshCw, color: 'text-slate-600', bg: 'bg-slate-100', accent: 'accent-slate-600', value: logisticsInput, setter: setLogisticsInput, min: 0.1, max: 0.8, step: 0.01, unit: '', prefix: '', suffix: ' zł' },
     { label: 'Akcyza', icon: Zap, color: 'text-emerald-600', bg: 'bg-emerald-50', accent: 'accent-emerald-600', value: exciseInput, setter: setExciseInput, min: 0.0, max: 3.0, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
     { label: 'Opłata Paliwowa', icon: Fuel, color: 'text-emerald-600', bg: 'bg-emerald-50', accent: 'accent-emerald-600', value: fuelFeeInput, setter: setFuelFeeInput, min: 0.0, max: 0.3, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
     { label: 'Opłata Zapasowa', icon: History, color: 'text-emerald-600', bg: 'bg-emerald-50', accent: 'accent-emerald-600', value: reserveFeeInput, setter: setReserveFeeInput, min: 0.00, max: 0.15, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
@@ -1173,7 +1175,7 @@ export default function App() {
                           <div className="flex justify-between items-end">
                             <div className="flex items-center gap-2">
                               <s.icon className={cn("w-4 h-4", s.color)} />
-                              <label className="text-sm font-semibold text-slate-600">{s.label} ({s.unit})</label>
+                              <label className="text-sm font-semibold text-slate-600">{s.label}{s.unit && ` (${s.unit})`}</label>
                               {s.label === 'Ropa Brent' && (
                                 <button
                                   onMouseEnter={() => setShowBrentTooltip(true)}
@@ -1246,13 +1248,13 @@ export default function App() {
                                   <History className="w-4 h-4" />
                                 </button>
                               )}
-                              {s.label === 'Logistyka i Blending' && (
+                              {s.label === 'Logistyka i Blending (PLN/l)' && (
                                 <button
                                   onMouseEnter={() => setShowLogisticsTooltip(true)}
                                   onMouseLeave={() => setShowLogisticsTooltip(false)}
                                   className="text-slate-400 hover:text-slate-600 transition-colors"
                                 >
-                                  <History className="w-4 h-4" />
+                                  <Info className="w-4 h-4" />
                                 </button>
                               )}
                               {s.label === 'Marża Detaliczna' && (
@@ -1265,9 +1267,56 @@ export default function App() {
                                 </button>
                               )}
                             </div>
-                            <span className={cn("text-lg font-bold", s.color)}>
-                              {s.prefix}{s.value.toFixed(s.step >= 1 ? 0 : 2)}{s.suffix}
-                            </span>
+                            <div className="relative">
+                              <span
+                                onMouseEnter={() => {
+                                  if (s.label === 'Marża Rafineryjna') setShowRefineryValueTooltip(true);
+                                  if (s.label === 'Logistyka i Blending (PLN/l)') setShowLogisticsValueTooltip(true);
+                                }}
+                                onMouseLeave={() => {
+                                  if (s.label === 'Marża Rafineryjna') setShowRefineryValueTooltip(false);
+                                  if (s.label === 'Logistyka i Blending (PLN/l)') setShowLogisticsValueTooltip(false);
+                                }}
+                                className={cn(
+                                  "text-lg font-bold",
+                                  s.color,
+                                  s.label === 'Marża Rafineryjna' && "cursor-help border-b border-dashed border-orange-400",
+                                  s.label === 'Logistyka i Blending (PLN/l)' && "cursor-help border-b border-dashed border-slate-400"
+                                )}
+                              >
+                                {s.prefix}{s.value.toFixed(s.step >= 1 ? 0 : 2)}{s.suffix}
+                              </span>
+                              {s.label === 'Marża Rafineryjna' && (
+                                <AnimatePresence>
+                                  {showRefineryValueTooltip && (
+                                    <motion.div
+                                      initial={{ opacity: 0, y: 10 }}
+                                      animate={{ opacity: 1, y: 0 }}
+                                      exit={{ opacity: 0, y: 10 }}
+                                      className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[250px] bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-slate-200 rounded-xl p-3 shadow-2xl z-[100] text-xs text-left"
+                                    >
+                                      Wartość 10 USD/bbl to historyczny benchmark 'zdrowej' i stabilnej marży dla nowoczesnych rafinerii o wysokim stopniu złożoności (np. Płock, Gdańsk). Przyjęcie tej stałej jako domyślnej pozwala modelowi wyliczyć 'cenę sprawiedliwą', wolną od rekordowych marż spekulacyjnych i szumów rynkowych.
+                                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-slate-950" />
+                                    </motion.div>
+                                  )}
+                                </AnimatePresence>
+                              )}
+                              {s.label === 'Logistyka i Blending (PLN/l)' && (
+                                <AnimatePresence>
+                                  {showLogisticsValueTooltip && (
+                                    <motion.div
+                                      initial={{ opacity: 0, y: 10 }}
+                                      animate={{ opacity: 1, y: 0 }}
+                                      exit={{ opacity: 0, y: 10 }}
+                                      className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[250px] bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-slate-200 rounded-xl p-3 shadow-2xl z-[100] text-xs text-left"
+                                    >
+                                      Benchmark 0,40 zł/l odzwierciedla realne koszty dostaw w Polsce przy uwzględnieniu wysokich cen energii elektrycznej oraz biokomponentów. Jest to wartość uśredniona dla nowoczesnej sieci logistycznej, pozwalająca na utrzymanie stabilności dostaw i najwyższych norm jakości paliwa.
+                                      <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-slate-950" />
+                                    </motion.div>
+                                  )}
+                                </AnimatePresence>
+                              )}
+                            </div>
                           </div>
                           <input
                             type="range"
@@ -1407,42 +1456,23 @@ export default function App() {
                               )}
                             </AnimatePresence>
                           )}
-                          {s.label === 'Logistyka i Blending' && (
+                          {s.label === 'Logistyka i Blending (PLN/l)' && (
                             <AnimatePresence>
                               {showLogisticsTooltip && (
                                 <motion.div
                                   initial={{ opacity: 0, scale: 0.95, y: -10 }}
                                   animate={{ opacity: 1, scale: 1, y: 0 }}
                                   exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-white rounded-xl p-4 shadow-2xl z-[100]"
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-slate-200 rounded-xl p-4 shadow-2xl z-[100] text-xs"
                                 >
-                                  <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Kosztów Logistycznych (PLN/l)</h4>
-                                  <table className="w-full text-xs text-left">
-                                    <thead>
-                                      <tr className="border-b border-slate-600">
-                                        <th className="py-2 font-semibold text-slate-400">Rok</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {logisticsHistory.map(item => (
-                                        <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
-                                          <td className="py-1.5 font-medium text-slate-300">{item.year}</td>
-                                          {item.q.map((val, i) => (
-                                            <td key={i} className="py-1.5 text-center font-mono text-white">
-                                              {val !== null ? val.toFixed(2) : '-'}
-                                            </td>
-                                          ))}
-                                        </tr>
-                                      ))}
-                                    </tbody>
-                                  </table>
-                                  <p className="text-[10px] text-slate-400 mt-3 text-right">
-                                    Źródło: Raporty roczne POPiHN (Polska Organizacja Przemysłu i Handlu Naftowego)
-                                  </p>
+                                  <p className="mb-2 font-medium">Logistyka i Blending to koszty operacyjne związane z dostarczeniem paliwa do konsumenta.</p>
+                                  <p className="mb-2">Obejmują one:</p>
+                                  <ul className="list-disc list-inside space-y-1 text-slate-300">
+                                    <li>Transport (rurociągi, kolej, autocysterny).</li>
+                                    <li>Składowanie i magazynowanie w bazach paliwowych.</li>
+                                    <li>Blending: koszt dodania obowiązkowych biokomponentów (NCW).</li>
+                                    <li>Dodatki uszlachetniające poprawiające jakość spalania.</li>
+                                  </ul>
                                   <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
                                 </motion.div>
                               )}
