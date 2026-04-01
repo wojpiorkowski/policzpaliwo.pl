@@ -1397,7 +1397,7 @@ export default function App() {
                                   onMouseLeave={() => setShowLogisticsTooltip(false)}
                                   className="text-slate-400 hover:text-slate-600 transition-colors"
                                 >
-                                  <Info className="w-4 h-4" />
+                                  <History className="w-4 h-4" />
                                 </button>
                               )}
                               {s.label === 'Marża Detaliczna' && (
@@ -1606,16 +1606,35 @@ export default function App() {
                                   initial={{ opacity: 0, scale: 0.95, y: -10 }}
                                   animate={{ opacity: 1, scale: 1, y: 0 }}
                                   exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-slate-200 rounded-xl p-4 shadow-2xl z-[100] text-xs"
+                                  className="absolute top-full right-0 mt-2 w-72 bg-slate-950/95 backdrop-blur-md border border-slate-700/50 text-white rounded-xl p-4 shadow-2xl z-[100]"
                                 >
-                                  <p className="mb-2 font-medium">Logistyka i Blending to koszty operacyjne związane z dostarczeniem paliwa do konsumenta.</p>
-                                  <p className="mb-2">Obejmują one:</p>
-                                  <ul className="list-disc list-inside space-y-1 text-slate-300">
-                                    <li>Transport (rurociągi, kolej, autocysterny).</li>
-                                    <li>Składowanie i magazynowanie w bazach paliwowych.</li>
-                                    <li>Blending: koszt dodania obowiązkowych biokomponentów (NCW).</li>
-                                    <li>Dodatki uszlachetniające poprawiające jakość spalania.</li>
-                                  </ul>
+                                  <h4 className="font-bold text-sm mb-3 text-slate-200">Historia Logistyki i Blendingu (PLN/l)</h4>
+                                  <table className="w-full text-xs text-left">
+                                    <thead>
+                                      <tr className="border-b border-slate-600">
+                                        <th className="py-2 font-semibold text-slate-400">Rok</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q1</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q2</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q3</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q4</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      {(fuelType === 'Pb95' ? logisticsHistory : dieselLogisticsHistory).map(item => (
+                                        <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
+                                          <td className="py-1.5 font-medium text-slate-300">{item.year}</td>
+                                          {item.q.map((val, i) => (
+                                            <td key={i} className="py-1.5 text-center font-mono text-white">
+                                              {val !== null ? val.toFixed(2) : '-'}
+                                            </td>
+                                          ))}
+                                        </tr>
+                                      ))}
+                                    </tbody>
+                                  </table>
+                                  <p className="text-[10px] text-slate-400 mt-3 text-right">
+                                    Koszty operacyjne związane z transportem, magazynowaniem i dodawaniem biokomponentów.
+                                  </p>
                                   <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
                                 </motion.div>
                               )}
