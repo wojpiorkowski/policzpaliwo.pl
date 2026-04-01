@@ -133,45 +133,42 @@ const HISTORICAL_DATA: HistoricalData[] = [
 ];
 
 const brentHistory = [
-  { year: '2016', q: [34.74, 48.13, 42.46, 48.30] },
-  { year: '2017', q: [55.70, 51.73, 52.65, 61.37] },
-  { year: '2018', q: [67.78, 75.92, 74.16, 74.84] },
-  { year: '2019', q: [62.46, 72.19, 64.07, 59.30] },
-  { year: '2020', q: [57.77, 18.11, 43.13, 36.33] }, // COVID-19
-  { year: '2021', q: [55.25, 67.73, 77.72, 83.10] },
-  { year: '2022', q: [92.35, 108.36, 111.51, 93.30] },
-  { year: '2023', q: [83.42, 81.32, 85.22, 86.82] },
-  { year: '2024', q: [82.98, 88.23, 81.39, 73.25] },
-  { year: '2025', q: [77.11, 63.37, 73.43, 65.44] },
-  { year: '2026', q: [101.04, null, null, null], current: 101.04 }
+  { year: '2016', q: [33.9, 45.6, 45.9, 49.3] },
+  { year: '2017', q: [53.7, 49.6, 52.1, 61.3] },
+  { year: '2018', q: [66.8, 74.4, 75.2, 68.8] },
+  { year: '2019', q: [63.1, 68.9, 62.0, 63.1] },
+  { year: '2020', q: [50.1, 29.6, 42.9, 44.2] },
+  { year: '2021', q: [61.1, 69.0, 73.5, 79.8] },
+  { year: '2022', q: [102.2, 113.9, 100.8, 88.9] },
+  { year: '2023', q: [81.2, 78.1, 86.7, 84.3] },
+  { year: '2024', q: [83.2, 85.0, 80.3, 74.7] },
+  { year: '2025', q: [75.7, 67.9, 69.1, 63.7] },
 ];
 
 const usdPlnHistory = [
-  { year: '2016', q: [4.05, 3.95, 3.90, 3.85] },
-  { year: '2017', q: [4.10, 3.95, 3.70, 3.65] },
-  { year: '2018', q: [3.45, 3.40, 3.70, 3.75] },
-  { year: '2019', q: [3.75, 3.80, 3.85, 3.95] },
-  { year: '2020', q: [3.80, 4.20, 3.95, 3.90] },
-  { year: '2021', q: [3.75, 3.80, 3.90, 4.00] },
-  { year: '2022', q: [4.05, 4.30, 4.75, 4.85] }, // Wojna na Ukrainie i kryzys energetyczny
-  { year: '2023', q: [4.40, 4.20, 4.05, 4.25] },
-  { year: '2024', q: [4.00, 4.05, 3.95, 4.05] },
-  { year: '2025', q: [4.00, 3.85, 3.95, 4.05] },
-  { year: '2026', q: [3.65, null, null, null], current: 3.65 }
+  { year: '2016', q: [3.96, 3.87, 3.89, 4.06] },
+  { year: '2017', q: [4.06, 3.83, 3.63, 3.60] },
+  { year: '2018', q: [3.40, 3.58, 3.70, 3.77] },
+  { year: '2019', q: [3.79, 3.81, 3.88, 3.87] },
+  { year: '2020', q: [3.92, 4.09, 3.80, 3.78] },
+  { year: '2021', q: [3.78, 3.76, 3.87, 4.04] },
+  { year: '2022', q: [4.13, 4.36, 4.71, 4.64] },
+  { year: '2023', q: [4.39, 4.17, 4.14, 4.11] },
+  { year: '2024', q: [3.99, 4.00, 3.90, 4.04] },
+  { year: '2025', q: [3.99, 3.76, 3.64, 3.64] },
 ];
 
-const refineryHistory = [
-  { year: '2016', q: [5.3, 6.0, 4.3, 5.8] },
-  { year: '2017', q: [5.3, 6.9, 7.9, 5.3] },
-  { year: '2018', q: [4.0, 5.2, 6.3, 4.8] },
-  { year: '2019', q: [4.4, 6.0, 7.2, 3.2] },
-  { year: '2020', q: [3.4, 3.2, 1.2, 1.0] },
-  { year: '2021', q: [0.5, 1.5, 3.1, 4.5] },
-  { year: '2022', q: [6.0, 26.5, 16.4, 22.0] },
-  { year: '2023', q: [18.3, 13.8, 21.9, 13.9] },
-  { year: '2024', q: [16.0, 12.6, 7.7, 7.7] },
-  { year: '2025', q: [8.7, 11.3, 15.2, 16.9] },
-  { year: '2026', q: [10.5, null, null, null], current: 10.8 }
+const orlenMarginHistory = [
+  { year: '2016', q: [8.0, 8.6, 6.7, 8.0] },
+  { year: '2017', q: [7.4, 8.4, 8.9, 6.2] },
+  { year: '2018', q: [5.6, 7.4, 7.6, 5.8] },
+  { year: '2019', q: [4.6, 6.5, 8.2, 4.7] },
+  { year: '2020', q: [5.8, 3.3, 1.1, 1.1] },
+  { year: '2021', q: [2.0, 3.5, 5.4, 6.3] },
+  { year: '2022', q: [13.8, 38.8, 23.8, 28.4] },
+  { year: '2023', q: [23.4, 15.7, 21.0, 12.0] },
+  { year: '2024', q: [15.9, 11.6, 6.6, 8.5] },
+  { year: '2025', q: [8.9, 10.1, 13.2, 16.2] },
 ];
 
 const logisticsHistory = [
@@ -185,7 +182,6 @@ const logisticsHistory = [
   { year: '2023', q: [0.44, 0.43, 0.42, 0.42] },
   { year: '2024', q: [0.41, 0.40, 0.40, 0.41] },
   { year: '2025', q: [0.41, 0.42, 0.42, 0.43] },
-  { year: '2026', q: [0.43, null, null, null], current: 0.40 }
 ];
 
 const retailHistory = [
@@ -199,7 +195,6 @@ const retailHistory = [
   { year: '2023', q: [0.18, 0.22, 0.14, 0.02] },
   { year: '2024', q: [0.15, 0.16, 0.14, 0.15] },
   { year: '2025', q: [0.16, 0.17, 0.16, 0.15] },
-  { year: '2026', q: [0.18, null, null, null], current: 0.22 }
 ];
 
 const exciseHistory = [
@@ -213,7 +208,6 @@ const exciseHistory = [
   { year: '2023', q: [1.53, 1.53, 1.53, 1.53] },
   { year: '2024', q: [1.53, 1.53, 1.53, 1.53] },
   { year: '2025', q: [1.53, 1.53, 1.53, 1.53] },
-  { year: '2026', q: [1.53, null, null, null], current: 1.53 }
 ];
 
 const dieselExciseHistory = [
@@ -227,7 +221,6 @@ const dieselExciseHistory = [
   { year: '2023', q: [1.16, 1.16, 1.16, 1.16] },
   { year: '2024', q: [1.16, 1.16, 1.16, 1.16] },
   { year: '2025', q: [1.16, 1.16, 1.16, 1.16] },
-  { year: '2026', q: [1.16, null, null, null], current: 1.16 }
 ];
 
 const surchargeHistory = [
@@ -241,7 +234,6 @@ const surchargeHistory = [
   { year: '2023', q: [0.17, 0.17, 0.17, 0.17] },
   { year: '2024', q: [0.19, 0.19, 0.19, 0.19] },
   { year: '2025', q: [0.20, 0.20, 0.20, 0.20] },
-  { year: '2026', q: [0.21, null, null, null], current: 0.21 }
 ];
 
 const dieselSurchargeHistory = [
@@ -255,7 +247,6 @@ const dieselSurchargeHistory = [
   { year: '2023', q: [0.35, 0.35, 0.35, 0.35] },
   { year: '2024', q: [0.39, 0.39, 0.39, 0.39] },
   { year: '2025', q: [0.41, 0.41, 0.41, 0.41] },
-  { year: '2026', q: [0.44, null, null, null], current: 0.44 }
 ];
 
 const strategicReserveHistory = [
@@ -269,7 +260,6 @@ const strategicReserveHistory = [
   { year: '2023', q: [0.04, 0.04, 0.04, 0.04] },
   { year: '2024', q: [0.10, 0.10, 0.10, 0.10] }, // Skokowa zmiana stawki
   { year: '2025', q: [0.10, 0.10, 0.10, 0.10] },
-  { year: '2026', q: [0.10, null, null, null], current: 0.10 }
 ];
 
 const emissionFeeHistory = [
@@ -283,7 +273,6 @@ const emissionFeeHistory = [
   { year: '2023', q: [0.08, 0.08, 0.08, 0.08] },
   { year: '2024', q: [0.08, 0.08, 0.08, 0.08] },
   { year: '2025', q: [0.08, 0.08, 0.08, 0.08] },
-  { year: '2026', q: [0.08, null, null, null], current: 0.08 }
 ];
 
 const vatHistory = [
@@ -297,7 +286,6 @@ const vatHistory = [
   { year: '2023', q: [23, 23, 23, 23] },
   { year: '2024', q: [23, 23, 23, 23] },
   { year: '2025', q: [23, 23, 23, 23] },
-  { year: '2026', q: [23, null, null, null], current: 23 }
 ];
 
 // --- Components ---
@@ -531,11 +519,8 @@ const getHistoryValue = (history: any[], year: string, quarterIndex: number, fal
 const CustomChartTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
-    const [year, month] = label.split('-');
-    const months: { [key: string]: string } = {
-      '01': 'Styczeń', '04': 'Kwiecień', '07': 'Lipiec', '10': 'Październik', '03': 'Marzec'
-    };
-    const dateLabel = `${months[month] || month} ${year}`;
+    const [year, month] = label.split('-');    const quarter = getQuarterIndex(month) + 1;
+    const dateLabel = `Q${quarter} ${year}`;
     
     let breakdownNode = null;
     if (data.refineryMargin !== undefined && data.refineryMargin !== null && data.benchmarkPrice !== null) {
@@ -741,9 +726,7 @@ export default function App() {
     const priceWithRetailMargin = sumWithoutRetailMargin + retailMargin;
     const finalGrossPrice = priceWithRetailMargin * (1 + vat / 100);
     return finalGrossPrice;
-  };
-
-  const calculatedPrice = useMemo(() => calculatePrice(
+  };  const calculatedPrice = useMemo(() => calculatePrice(
     brentInput, usdPlnInput, refineryMarginInput, logisticsInput,
     exciseInput, fuelFeeInput, reserveFeeInput, emissionFeeInput,
     retailMarginInput, vatInput
@@ -752,19 +735,17 @@ export default function App() {
   const baseCalculatedPrice = useMemo(() => {
     const defaultExcise = fuelType === 'Pb95' ? 1.50 : 1.16;
     const defaultFuelFee = fuelType === 'Pb95' ? 0.21 : 0.42;
-    const defaultRefineryMargin = 10.0;
     const defaultLogistics = 0.40;
     const defaultReserveFee = 0.10;
     const defaultEmissionFee = 0.08;
     const defaultRetailMargin = 0.22;
     const defaultVat = 23;
 
-    return calculatePrice(
-      brentInput, usdPlnInput, defaultRefineryMargin, defaultLogistics,
+    return calculatePrice(      brentInput, usdPlnInput, refineryMarginInput, defaultLogistics,
       defaultExcise, defaultFuelFee, defaultReserveFee, defaultEmissionFee,
       defaultRetailMargin, defaultVat
     );
-  }, [brentInput, usdPlnInput, fuelType]);
+  }, [brentInput, usdPlnInput, fuelType, refineryMarginInput]);
 
   const { displayedEstimatedPrice, displayedEstimatedPriceLabel } = useMemo(() => {
     if (activeChartData) {
@@ -772,19 +753,17 @@ export default function App() {
       const [year, month] = date.split('-');
       const qIndex = getQuarterIndex(month);
 
-      const refineryMargin = getHistoryValue(refineryHistory, year, qIndex, refineryMarginInput);
+      const refineryMargin = getHistoryValue(orlenMarginHistory, year, qIndex, refineryMarginInput);
       const logistics = getHistoryValue(logisticsHistory, year, qIndex, logisticsInput);
       const retailMargin = getHistoryValue(retailHistory, year, qIndex, retailMarginInput);
       const excise = getHistoryValue(fuelType === 'Pb95' ? exciseHistory : dieselExciseHistory, year, qIndex, exciseInput);
       const fuelFee = getHistoryValue(fuelType === 'Pb95' ? surchargeHistory : dieselSurchargeHistory, year, qIndex, fuelFeeInput);
       const reserveFee = getHistoryValue(strategicReserveHistory, year, qIndex, reserveFeeInput);
       const emissionFee = getHistoryValue(emissionFeeHistory, year, qIndex, emissionFeeInput);
-      const vat = getHistoryValue(vatHistory, year, qIndex, vatInput);
+      const vat = getHistoryValue(vatHistory, year, qIndex, vatInput);      const price = calculatePrice(brent, usdPln, refineryMargin, logistics, excise, fuelFee, reserveFee, emissionFee, retailMargin, vat);
 
-      const price = calculatePrice(brent, usdPln, refineryMargin, logistics, excise, fuelFee, reserveFee, emissionFee, retailMargin, vat);
-
-      const months: { [key: string]: string } = { '01': 'Styczeń', '04': 'Kwiecień', '07': 'Lipiec', '10': 'Październik', '03': 'Marzec' };
-      const label = `${months[month] || month} ${year}`;
+      const quarter = getQuarterIndex(month) + 1;
+      const label = `Q${quarter} ${year}`;
 
       return { displayedEstimatedPrice: price, displayedEstimatedPriceLabel: label };
     }
@@ -869,7 +848,7 @@ export default function App() {
       const brent = dataPoint.brent;
       const usdPln = dataPoint.usdPln;
 
-      const refineryMargin = findHistoryValue(refineryHistory, year, qIndex);
+      const refineryMargin = findHistoryValue(orlenMarginHistory, year, qIndex);
       const logistics = findHistoryValue(logisticsHistory, year, qIndex);
       const retailMargin = findHistoryValue(retailHistory, year, qIndex);
       const excise = findHistoryValue(fuelType === 'Pb95' ? exciseHistory : dieselExciseHistory, year, qIndex);
@@ -1012,7 +991,7 @@ export default function App() {
   const sliders = [
     { label: 'Ropa Brent', icon: Globe, color: 'text-blue-600', bg: 'bg-blue-50', accent: 'accent-blue-600', value: brentInput, setter: setBrentInput, min: 10, max: 200, step: 1, unit: 'USD/bbl', prefix: '$', suffix: '' },
     { label: 'Kurs USD/PLN', icon: DollarSign, color: 'text-red-600', bg: 'bg-red-50', accent: 'accent-red-600', value: usdPlnInput, setter: setUsdPlnInput, min: 3.0, max: 5.0, step: 0.01, unit: 'PLN', prefix: '', suffix: ' zł' },
-    { label: 'Marża Rafineryjna', icon: TrendingUp, color: 'text-orange-600', bg: 'bg-orange-50', accent: 'accent-orange-600', value: refineryMarginInput, setter: setRefineryMarginInput, min: 2, max: 50, step: 1, unit: 'USD/bbl', prefix: '$', suffix: '' },
+    { label: 'Marża Rafineryjna + Dyferencjał (Dane Orlen)', icon: TrendingUp, color: 'text-orange-600', bg: 'bg-orange-50', accent: 'accent-orange-600', value: refineryMarginInput, setter: setRefineryMarginInput, min: 2, max: 50, step: 1, unit: 'USD/bbl', prefix: '$', suffix: '' },
     { label: 'Logistyka i Blending (PLN/l)', icon: RefreshCw, color: 'text-slate-600', bg: 'bg-slate-100', accent: 'accent-slate-600', value: logisticsInput, setter: setLogisticsInput, min: 0.1, max: 0.8, step: 0.01, unit: '', prefix: '', suffix: ' zł' },
     { label: 'Akcyza', icon: Zap, color: 'text-emerald-600', bg: 'bg-emerald-50', accent: 'accent-emerald-600', value: exciseInput, setter: setExciseInput, min: 0.0, max: 3.0, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
     { label: 'Opłata Paliwowa', icon: Fuel, color: 'text-emerald-600', bg: 'bg-emerald-50', accent: 'accent-emerald-600', value: fuelFeeInput, setter: setFuelFeeInput, min: 0.0, max: 0.3, step: 0.01, unit: 'PLN/l', prefix: '', suffix: ' zł' },
@@ -1321,7 +1300,7 @@ export default function App() {
                                   <History className="w-4 h-4" />
                                 </button>
                               )}
-                              {s.label === 'Marża Rafineryjna' && (
+                              {s.label === 'Marża Rafineryjna + Dyferencjał (Dane Orlen)' && (
                                 <button
                                   onMouseEnter={() => setShowRefineryTooltip(true)}
                                   onMouseLeave={() => setShowRefineryTooltip(false)}
@@ -1397,25 +1376,25 @@ export default function App() {
                             <div className="relative">
                               <span
                                 onMouseEnter={() => {
-                                  if (s.label === 'Marża Rafineryjna') setShowRefineryValueTooltip(true);
+                                  if (s.label === 'Marża Rafineryjna + Dyferencjał (Dane Orlen)') setShowRefineryValueTooltip(true);
                                   if (s.label === 'Logistyka i Blending (PLN/l)') setShowLogisticsValueTooltip(true);
                                 }}
                                 onMouseLeave={() => {
-                                  if (s.label === 'Marża Rafineryjna') setShowRefineryValueTooltip(false);
+                                  if (s.label === 'Marża Rafineryjna + Dyferencjał (Dane Orlen)') setShowRefineryValueTooltip(false);
                                   if (s.label === 'Logistyka i Blending (PLN/l)') setShowLogisticsValueTooltip(false);
                                 }}
                                 className={cn(
                                   "text-lg font-bold",
                                   s.color,
-                                  s.label === 'Marża Rafineryjna' && "cursor-help border-b border-dashed border-orange-400",
+                                  s.label === 'Marża Rafineryjna + Dyferencjał (Dane Orlen)' && "cursor-help border-b border-dashed border-orange-400",
                                   s.label === 'Logistyka i Blending (PLN/l)' && "cursor-help border-b border-dashed border-slate-400"
                                 )}
                               >
                                 {s.prefix}{s.value.toFixed(s.step >= 1 ? 0 : 2)}{s.suffix}
                               </span>
-                              {s.label === 'Marża Rafineryjna' && (
+                          {s.label === 'Marża Rafineryjna + Dyferencjał (Dane Orlen)' && (
                                 <AnimatePresence>
-                                  {showRefineryValueTooltip && (
+                              {showRefineryValueTooltip && (
                                     <motion.div
                                       initial={{ opacity: 0, y: 10 }}
                                       animate={{ opacity: 1, y: 0 }}
@@ -1514,10 +1493,10 @@ export default function App() {
                                     <thead>
                                       <tr className="border-b border-slate-600">
                                         <th className="py-2 font-semibold text-slate-400">Rok</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q1</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q2</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q3</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q4</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -1542,7 +1521,7 @@ export default function App() {
                               )}
                             </AnimatePresence>
                           )}
-                          {s.label === 'Marża Rafineryjna' && (
+                      {s.label === 'Marża Rafineryjna + Dyferencjał (Dane Orlen)' && (
                             <AnimatePresence>
                               {showRefineryTooltip && (
                                 <motion.div
@@ -1556,14 +1535,14 @@ export default function App() {
                                     <thead>
                                       <tr className="border-b border-slate-600">
                                         <th className="py-2 font-semibold text-slate-400">Rok</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q1</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q2</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q3</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q4</th>
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      {refineryHistory.map(item => (
+                                      {orlenMarginHistory.map(item => (
                                         <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
                                           <td className="py-1.5 font-medium text-slate-300">{item.year}</td>
                                           {item.q.map((val, i) => (
@@ -1576,7 +1555,7 @@ export default function App() {
                                     </tbody>
                                   </table>
                                   <p className="text-[10px] text-slate-400 mt-3 text-right">
-                                    Źródło: Dane makro Orlen S.A. (Modelowa Marża Rafineryjna)
+                                    Źródło: Dane makro Orlen S.A. (Modelowa Marża Rafineryjna + Dyferencjał)
                                   </p>
                                   <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
                                 </motion.div>
@@ -1619,10 +1598,10 @@ export default function App() {
                                     <thead>
                                       <tr className="border-b border-slate-600">
                                         <th className="py-2 font-semibold text-slate-400">Rok</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q1</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q2</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q3</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q4</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -1658,10 +1637,10 @@ export default function App() {
                                     <thead>
                                       <tr className="border-b border-slate-600">
                                         <th className="py-2 font-semibold text-slate-400">Rok</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q1</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q2</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q3</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q4</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -1699,10 +1678,10 @@ export default function App() {
                                     <thead>
                                       <tr className="border-b border-slate-600">
                                         <th className="py-2 font-semibold text-slate-400">Rok</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q1</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q2</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q3</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q4</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -1740,10 +1719,10 @@ export default function App() {
                                     <thead>
                                       <tr className="border-b border-slate-600">
                                         <th className="py-2 font-semibold text-slate-400">Rok</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q1</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q2</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q3</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q4</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -1781,10 +1760,10 @@ export default function App() {
                                     <thead>
                                       <tr className="border-b border-slate-600">
                                         <th className="py-2 font-semibold text-slate-400">Rok</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q1</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q2</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q3</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q4</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -1822,10 +1801,10 @@ export default function App() {
                                     <thead>
                                       <tr className="border-b border-slate-600">
                                         <th className="py-2 font-semibold text-slate-400">Rok</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Sty</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Kwi</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Lip</th>
-                                        <th className="py-2 font-semibold text-slate-400 text-center">Paź</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q1</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q2</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q3</th>
+                                        <th className="py-2 font-semibold text-slate-400 text-center">Q4</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -2023,7 +2002,7 @@ export default function App() {
                     </div>
                   )}
                   <div className="flex items-center gap-1.5">
-                    <div className="w-8 h-0 border-t-2 border-dashed border-amber-500" />
+                    <div className="w-8 h-0 border-t-2 border-dashed border-orange-500" />
                     <span className="text-[10px] font-bold text-slate-500 uppercase">Cena Modelowa (Benchmark)</span>
                   </div>
                   <div className="flex items-center gap-1.5">
@@ -2147,11 +2126,11 @@ export default function App() {
                       type="monotone"
                       dataKey="benchmarkPrice"
                       name="Cena Modelowa (Benchmark)"
-                      stroke="#f59e0b"
+                      stroke="#f97316"
                       strokeWidth={2}
                       strokeDasharray="5 5"
                       dot={false}
-                      activeDot={{ r: 6, strokeWidth: 0, fill: '#f59e0b' }}
+                      activeDot={{ r: 6, strokeWidth: 0, fill: '#f97316' }}
                     />
                   </AreaChart>
                 </ResponsiveContainer>
