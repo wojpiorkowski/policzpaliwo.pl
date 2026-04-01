@@ -78,84 +78,57 @@ const initialRegionalPrices: RegionalPrices = {
 
 const HISTORICAL_DATA: HistoricalData[] = [
   // 2016
-  { date: '2016-01', brent: 34.74, usdPln: 4.05, pricePb95: 4.15, priceON: 3.90 },
-  { date: '2016-04', brent: 48.13, usdPln: 3.95, pricePb95: 4.30, priceON: 4.05 },
-  { date: '2016-07', brent: 42.46, usdPln: 3.90, pricePb95: 4.35, priceON: 4.10 },
-  { date: '2016-10', brent: 48.30, usdPln: 3.85, pricePb95: 4.50, priceON: 4.25 },
+  { date: '2016-01', brent: 34.74, usdPln: 4.05, pricePb95: 4.02, priceON: 3.80 },
+  { date: '2016-04', brent: 48.13, usdPln: 3.95, pricePb95: 4.39, priceON: 4.07 },
+  { date: '2016-07', brent: 42.46, usdPln: 3.90, pricePb95: 4.40, priceON: 4.18 },
+  { date: '2016-10', brent: 48.30, usdPln: 3.85, pricePb95: 4.56, priceON: 4.42 },
   // 2017
-  { date: '2017-01', brent: 55.70, usdPln: 4.10, pricePb95: 4.65, priceON: 4.55 },
-  { date: '2017-04', brent: 51.73, usdPln: 3.95, pricePb95: 4.60, priceON: 4.45 },
-  { date: '2017-07', brent: 52.65, usdPln: 3.70, pricePb95: 4.55, priceON: 4.40 },
-  { date: '2017-10', brent: 61.37, usdPln: 3.65, pricePb95: 4.75, priceON: 4.65 },
+  { date: '2017-01', brent: 55.70, usdPln: 4.10, pricePb95: 4.72, priceON: 4.60 },
+  { date: '2017-04', brent: 51.73, usdPln: 3.95, pricePb95: 4.54, priceON: 4.35 },
+  { date: '2017-07', brent: 52.65, usdPln: 3.70, pricePb95: 4.47, priceON: 4.26 },
+  { date: '2017-10', brent: 61.37, usdPln: 3.65, pricePb95: 4.64, priceON: 4.51 },
   // 2018
-  { date: '2018-01', brent: 67.78, usdPln: 3.45, pricePb95: 4.85, priceON: 4.75 },
-  { date: '2018-04', brent: 75.92, usdPln: 3.40, pricePb95: 5.05, priceON: 4.95 },
-  { date: '2018-07', brent: 74.16, usdPln: 3.70, pricePb95: 5.15, priceON: 5.05 },
-  { date: '2018-10', brent: 74.84, usdPln: 3.75, pricePb95: 5.20, priceON: 5.15 },
+  { date: '2018-01', brent: 67.78, usdPln: 3.45, pricePb95: 4.66, priceON: 4.56 },
+  { date: '2018-04', brent: 75.92, usdPln: 3.40, pricePb95: 4.97, priceON: 4.90 },
+  { date: '2018-07', brent: 74.16, usdPln: 3.70, pricePb95: 5.09, priceON: 5.01 },
+  { date: '2018-10', brent: 74.84, usdPln: 3.75, pricePb95: 5.02, priceON: 5.18 },
   // 2019
-  { date: '2019-01', brent: 62.46, usdPln: 3.75, pricePb95: 4.95, priceON: 4.90 },
-  { date: '2019-04', brent: 72.19, usdPln: 3.80, pricePb95: 5.15, priceON: 5.10 },
-  { date: '2019-07', brent: 64.07, usdPln: 3.85, pricePb95: 5.25, priceON: 5.15 },
-  { date: '2019-10', brent: 59.30, usdPln: 3.95, pricePb95: 5.10, priceON: 5.05 },
+  { date: '2019-01', brent: 62.46, usdPln: 3.75, pricePb95: 4.77, priceON: 5.03 },
+  { date: '2019-04', brent: 72.19, usdPln: 3.80, pricePb95: 5.19, priceON: 5.15 },
+  { date: '2019-07', brent: 64.07, usdPln: 3.85, pricePb95: 5.08, priceON: 5.02 },
+  { date: '2019-10', brent: 59.30, usdPln: 3.95, pricePb95: 4.93, priceON: 4.97 },
   // 2020
-  { date: '2020-01', brent: 57.77, usdPln: 3.80, pricePb95: 4.90, priceON: 4.95 },
-  { date: '2020-04', brent: 18.11, usdPln: 4.20, pricePb95: 3.95, priceON: 4.05 },
-  { date: '2020-07', brent: 43.13, usdPln: 3.95, pricePb95: 4.25, priceON: 4.30 },
-  { date: '2020-10', brent: 36.33, usdPln: 3.90, pricePb95: 4.40, priceON: 4.45 },
+  { date: '2020-01', brent: 57.77, usdPln: 3.80, pricePb95: 4.79, priceON: 4.97 },
+  { date: '2020-04', brent: 18.11, usdPln: 4.20, pricePb95: 4.05, priceON: 4.13 },
+  { date: '2020-07', brent: 43.13, usdPln: 3.95, pricePb95: 4.41, priceON: 4.34 },
+  { date: '2020-10', brent: 36.33, usdPln: 3.90, pricePb95: 4.47, priceON: 4.39 },
   // 2021
-  { date: '2021-01', brent: 55.25, usdPln: 3.75, pricePb95: 4.75, priceON: 4.70 },
-  { date: '2021-04', brent: 67.73, usdPln: 3.80, pricePb95: 5.25, priceON: 5.20 },
-  { date: '2021-07', brent: 77.72, usdPln: 3.90, pricePb95: 5.65, priceON: 5.60 },
-  { date: '2021-10', brent: 83.10, usdPln: 4.00, pricePb95: 5.95, priceON: 5.90 },
+  { date: '2021-01', brent: 55.25, usdPln: 3.75, pricePb95: 4.90, priceON: 4.88 },
+  { date: '2021-04', brent: 67.73, usdPln: 3.80, pricePb95: 5.33, priceON: 5.26 },
+  { date: '2021-07', brent: 77.72, usdPln: 3.90, pricePb95: 5.73, priceON: 5.49 },
+  { date: '2021-10', brent: 83.10, usdPln: 4.00, pricePb95: 5.94, priceON: 5.94 },
   // 2022
-  { date: '2022-01', brent: 92.35, usdPln: 4.05, pricePb95: 5.90, priceON: 5.95 },
-  { date: '2022-04', brent: 108.36, usdPln: 4.30, pricePb95: 6.45, priceON: 7.10 },
-  { date: '2022-07', brent: 111.51, usdPln: 4.75, pricePb95: 7.35, priceON: 7.60 },
-  { date: '2022-10', brent: 93.30, usdPln: 4.85, pricePb95: 6.85, priceON: 8.05 },
+  { date: '2022-01', brent: 92.35, usdPln: 4.05, pricePb95: 5.93, priceON: 6.19 },
+  { date: '2022-04', brent: 108.36, usdPln: 4.30, pricePb95: 7.22, priceON: 7.43 },
+  { date: '2022-07', brent: 111.51, usdPln: 4.75, pricePb95: 6.88, priceON: 7.42 },
+  { date: '2022-10', brent: 93.30, usdPln: 4.85, pricePb95: 6.64, priceON: 7.79 },
   // 2023
-  { date: '2023-01', brent: 83.42, usdPln: 4.40, pricePb95: 6.55, priceON: 7.65 },
-  { date: '2023-04', brent: 81.32, usdPln: 4.20, pricePb95: 6.75, priceON: 6.70 },
-  { date: '2023-07', brent: 85.22, usdPln: 4.05, pricePb95: 6.50, priceON: 6.30 },
-  { date: '2023-10', brent: 86.82, usdPln: 4.25, pricePb95: 6.10, priceON: 6.15 },
+  { date: '2023-01', brent: 83.42, usdPln: 4.40, pricePb95: 6.66, priceON: 7.38 },
+  { date: '2023-04', brent: 81.32, usdPln: 4.20, pricePb95: 6.60, priceON: 6.33 },
+  { date: '2023-07', brent: 85.22, usdPln: 4.05, pricePb95: 6.46, priceON: 6.29 },
+  { date: '2023-10', brent: 86.82, usdPln: 4.25, pricePb95: 6.34, priceON: 6.45 },
   // 2024
-  { date: '2024-01', brent: 82.98, usdPln: 4.00, pricePb95: 6.25, priceON: 6.45 },
-  { date: '2024-04', brent: 88.23, usdPln: 4.05, pricePb95: 6.65, priceON: 6.70 },
-  { date: '2024-07', brent: 81.39, usdPln: 3.95, pricePb95: 6.45, priceON: 6.50 },
-  { date: '2024-10', brent: 73.25, usdPln: 4.05, pricePb95: 6.05, priceON: 6.10 },
+  { date: '2024-01', brent: 82.98, usdPln: 4.00, pricePb95: 6.41, priceON: 6.60 },
+  { date: '2024-04', brent: 88.23, usdPln: 4.05, pricePb95: 6.63, priceON: 6.65 },
+  { date: '2024-07', brent: 81.39, usdPln: 3.95, pricePb95: 6.33, priceON: 6.34 },
+  { date: '2024-10', brent: 73.25, usdPln: 4.05, pricePb95: 6.09, priceON: 6.15 },
   // 2025
-  { date: '2025-01', brent: 77.11, usdPln: 4.00, pricePb95: 6.15, priceON: 6.25 },
-  { date: '2025-04', brent: 63.37, usdPln: 3.85, pricePb95: 5.95, priceON: 6.05 },
-  { date: '2025-07', brent: 73.43, usdPln: 3.95, pricePb95: 6.25, priceON: 6.35 },
-  { date: '2025-10', brent: 65.44, usdPln: 4.05, pricePb95: 5.85, priceON: 5.95 },
+  { date: '2025-01', brent: 77.11, usdPln: 4.00, pricePb95: 6.17, priceON: 6.29 },
+  { date: '2025-04', brent: 63.37, usdPln: 3.85, pricePb95: 5.86, priceON: 5.87 },
+  { date: '2025-07', brent: 73.43, usdPln: 3.95, pricePb95: 5.86, priceON: 5.95 },
+  { date: '2025-10', brent: 65.44, usdPln: 4.05, pricePb95: 5.89, priceON: 6.08 },
   // 2026
-  { date: '2026-01', brent: 72.25, usdPln: 3.95, pricePb95: 5.65, priceON: 5.75 },
-  { date: '2026-03', brent: 101.04, usdPln: 3.65, pricePb95: 6.85, priceON: 7.75 },
-];
-
-const brentHistory = [
-  { year: '2016', q: [33.9, 45.6, 45.9, 49.3] },
-  { year: '2017', q: [53.7, 49.6, 52.1, 61.3] },
-  { year: '2018', q: [66.8, 74.4, 75.2, 68.8] },
-  { year: '2019', q: [63.1, 68.9, 62.0, 63.1] },
-  { year: '2020', q: [50.1, 29.6, 42.9, 44.2] },
-  { year: '2021', q: [61.1, 69.0, 73.5, 79.8] },
-  { year: '2022', q: [102.2, 113.9, 100.8, 88.9] },
-  { year: '2023', q: [81.2, 78.1, 86.7, 84.3] },
-  { year: '2024', q: [83.2, 85.0, 80.3, 74.7] },
-  { year: '2025', q: [75.7, 67.9, 69.1, 63.7] },
-];
-
-const usdPlnHistory = [
-  { year: '2016', q: [3.96, 3.87, 3.89, 4.06] },
-  { year: '2017', q: [4.06, 3.83, 3.63, 3.60] },
-  { year: '2018', q: [3.40, 3.58, 3.70, 3.77] },
-  { year: '2019', q: [3.79, 3.81, 3.88, 3.87] },
-  { year: '2020', q: [3.92, 4.09, 3.80, 3.78] },
-  { year: '2021', q: [3.78, 3.76, 3.87, 4.04] },
-  { year: '2022', q: [4.13, 4.36, 4.71, 4.64] },
-  { year: '2023', q: [4.39, 4.17, 4.14, 4.11] },
-  { year: '2024', q: [3.99, 4.00, 3.90, 4.04] },
-  { year: '2025', q: [3.99, 3.76, 3.64, 3.64] },
+  { date: '2026-01', brent: 86.65, usdPln: 3.80, pricePb95: 6.46, priceON: 7.17 },
 ];
 
 const orlenMarginHistory = [
@@ -169,6 +142,7 @@ const orlenMarginHistory = [
   { year: '2023', q: [23.4, 15.7, 21.0, 12.0] },
   { year: '2024', q: [15.9, 11.6, 6.6, 8.5] },
   { year: '2025', q: [8.9, 10.1, 13.2, 16.2] },
+  { year: '2026', q: [11.3, null, null, null] },
 ];
 
 const logisticsHistory = [
@@ -182,6 +156,21 @@ const logisticsHistory = [
   { year: '2023', q: [0.44, 0.43, 0.42, 0.42] },
   { year: '2024', q: [0.41, 0.40, 0.40, 0.41] },
   { year: '2025', q: [0.41, 0.42, 0.42, 0.43] },
+  { year: '2026', q: [0.48, null, null, null] },
+];
+
+const dieselLogisticsHistory = [
+  { year: '2016', q: [0.19, 0.20, 0.20, 0.21] },
+  { year: '2017', q: [0.21, 0.22, 0.22, 0.23] },
+  { year: '2018', q: [0.23, 0.24, 0.24, 0.25] },
+  { year: '2019', q: [0.24, 0.25, 0.25, 0.26] },
+  { year: '2020', q: [0.27, 0.28, 0.28, 0.29] },
+  { year: '2021', q: [0.30, 0.32, 0.33, 0.35] },
+  { year: '2022', q: [0.38, 0.44, 0.48, 0.46] },
+  { year: '2023', q: [0.44, 0.43, 0.42, 0.42] },
+  { year: '2024', q: [0.41, 0.40, 0.40, 0.41] },
+  { year: '2025', q: [0.41, 0.42, 0.42, 0.43] },
+  { year: '2026', q: [0.52, null, null, null] },
 ];
 
 const retailHistory = [
@@ -195,6 +184,21 @@ const retailHistory = [
   { year: '2023', q: [0.18, 0.22, 0.14, 0.02] },
   { year: '2024', q: [0.15, 0.16, 0.14, 0.15] },
   { year: '2025', q: [0.16, 0.17, 0.16, 0.15] },
+  { year: '2026', q: [0.22, null, null, null] },
+];
+
+const dieselRetailHistory = [
+  { year: '2016', q: [0.14, 0.16, 0.18, 0.20] },
+  { year: '2017', q: [0.15, 0.17, 0.19, 0.17] },
+  { year: '2018', q: [0.16, 0.18, 0.21, 0.17] },
+  { year: '2019', q: [0.18, 0.20, 0.22, 0.12] },
+  { year: '2020', q: [0.22, 0.45, 0.24, 0.19] },
+  { year: '2021', q: [0.14, 0.16, 0.18, 0.16] },
+  { year: '2022', q: [0.12, 0.08, 0.04, 0.24] },
+  { year: '2023', q: [0.18, 0.22, 0.14, 0.02] },
+  { year: '2024', q: [0.15, 0.16, 0.14, 0.15] },
+  { year: '2025', q: [0.16, 0.17, 0.16, 0.15] },
+  { year: '2026', q: [0.25, null, null, null] },
 ];
 
 const exciseHistory = [
@@ -208,6 +212,7 @@ const exciseHistory = [
   { year: '2023', q: [1.53, 1.53, 1.53, 1.53] },
   { year: '2024', q: [1.53, 1.53, 1.53, 1.53] },
   { year: '2025', q: [1.53, 1.53, 1.53, 1.53] },
+  { year: '2026', q: [1.54, null, null, null] },
 ];
 
 const dieselExciseHistory = [
@@ -221,6 +226,7 @@ const dieselExciseHistory = [
   { year: '2023', q: [1.16, 1.16, 1.16, 1.16] },
   { year: '2024', q: [1.16, 1.16, 1.16, 1.16] },
   { year: '2025', q: [1.16, 1.16, 1.16, 1.16] },
+  { year: '2026', q: [1.20, null, null, null] },
 ];
 
 const surchargeHistory = [
@@ -234,6 +240,7 @@ const surchargeHistory = [
   { year: '2023', q: [0.17, 0.17, 0.17, 0.17] },
   { year: '2024', q: [0.19, 0.19, 0.19, 0.19] },
   { year: '2025', q: [0.20, 0.20, 0.20, 0.20] },
+  { year: '2026', q: [0.19, null, null, null] },
 ];
 
 const dieselSurchargeHistory = [
@@ -247,6 +254,7 @@ const dieselSurchargeHistory = [
   { year: '2023', q: [0.35, 0.35, 0.35, 0.35] },
   { year: '2024', q: [0.39, 0.39, 0.39, 0.39] },
   { year: '2025', q: [0.41, 0.41, 0.41, 0.41] },
+  { year: '2026', q: [0.44, null, null, null] },
 ];
 
 const strategicReserveHistory = [
@@ -260,6 +268,7 @@ const strategicReserveHistory = [
   { year: '2023', q: [0.04, 0.04, 0.04, 0.04] },
   { year: '2024', q: [0.10, 0.10, 0.10, 0.10] }, // Skokowa zmiana stawki
   { year: '2025', q: [0.10, 0.10, 0.10, 0.10] },
+  { year: '2026', q: [0.05, null, null, null] },
 ];
 
 const emissionFeeHistory = [
@@ -273,6 +282,7 @@ const emissionFeeHistory = [
   { year: '2023', q: [0.08, 0.08, 0.08, 0.08] },
   { year: '2024', q: [0.08, 0.08, 0.08, 0.08] },
   { year: '2025', q: [0.08, 0.08, 0.08, 0.08] },
+  { year: '2026', q: [0.08, null, null, null] },
 ];
 
 const vatHistory = [
@@ -286,6 +296,7 @@ const vatHistory = [
   { year: '2023', q: [23, 23, 23, 23] },
   { year: '2024', q: [23, 23, 23, 23] },
   { year: '2025', q: [23, 23, 23, 23] },
+  { year: '2026', q: [23, null, null, null] },
 ];
 
 // --- Components ---
@@ -519,7 +530,10 @@ const getHistoryValue = (history: any[], year: string, quarterIndex: number, fal
 const CustomChartTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     const data = payload[0].payload;
-    const [year, month] = label.split('-');    const quarter = getQuarterIndex(month) + 1;
+    
+    const index = data.index !== undefined ? data.index : 0;
+    const year = 2016 + Math.floor(index / 4);
+    const quarter = (index % 4) + 1;
     const dateLabel = `Q${quarter} ${year}`;
     
     let breakdownNode = null;
@@ -590,10 +604,10 @@ export default function App() {
   const [brentInput, setBrentInput] = useState(72);
   const [usdPlnInput, setUsdPlnInput] = useState(4.00);
   const [refineryMarginInput, setRefineryMarginInput] = useState(10);
-  const [logisticsInput, setLogisticsInput] = useState(0.4);
-  const [exciseInput, setExciseInput] = useState(1.5);
-  const [fuelFeeInput, setFuelFeeInput] = useState(0.21);
-  const [reserveFeeInput, setReserveFeeInput] = useState(0.10);
+  const [logisticsInput, setLogisticsInput] = useState(0.48);
+  const [exciseInput, setExciseInput] = useState(1.54);
+  const [fuelFeeInput, setFuelFeeInput] = useState(0.19);
+  const [reserveFeeInput, setReserveFeeInput] = useState(0.05);
   const [emissionFeeInput, setEmissionFeeInput] = useState(0.08);
   const [retailMarginInput, setRetailMarginInput] = useState(0.22);
   const [vatInput, setVatInput] = useState(23);
@@ -621,6 +635,20 @@ export default function App() {
   const [regionalPricesLoading, setRegionalPricesLoading] = useState(true);
   const [regionalPricesError, setRegionalPricesError] = useState<string | null>(null);
 
+
+  const groupedHistoricalData = useMemo(() => {
+    const grouped: Record<string, { year: string, brent: (number | null)[], usdPln: (number | null)[] }> = {};
+    HISTORICAL_DATA.forEach(item => {
+      const [year, month] = item.date.split('-');
+      const qIndex = getQuarterIndex(month);
+      if (!grouped[year]) {
+        grouped[year] = { year, brent: [null, null, null, null], usdPln: [null, null, null, null] };
+      }
+      grouped[year].brent[qIndex] = item.brent;
+      grouped[year].usdPln[qIndex] = item.usdPln;
+    });
+    return Object.values(grouped).sort((a, b) => a.year.localeCompare(b.year));
+  }, []);
 
   useEffect(() => {
     const checkApiKey = async (retries = 3) => {
@@ -733,12 +761,12 @@ export default function App() {
   ), [brentInput, usdPlnInput, refineryMarginInput, logisticsInput, exciseInput, fuelFeeInput, reserveFeeInput, emissionFeeInput, retailMarginInput, vatInput]);
 
   const baseCalculatedPrice = useMemo(() => {
-    const defaultExcise = fuelType === 'Pb95' ? 1.50 : 1.16;
-    const defaultFuelFee = fuelType === 'Pb95' ? 0.21 : 0.42;
-    const defaultLogistics = 0.40;
-    const defaultReserveFee = 0.10;
+    const defaultExcise = fuelType === 'Pb95' ? 1.54 : 1.20;
+    const defaultFuelFee = fuelType === 'Pb95' ? 0.19 : 0.44;
+    const defaultLogistics = fuelType === 'Pb95' ? 0.48 : 0.52;
+    const defaultReserveFee = 0.05;
     const defaultEmissionFee = 0.08;
-    const defaultRetailMargin = 0.22;
+    const defaultRetailMargin = fuelType === 'Pb95' ? 0.22 : 0.25;
     const defaultVat = 23;
 
     return calculatePrice(      brentInput, usdPlnInput, refineryMarginInput, defaultLogistics,
@@ -754,8 +782,8 @@ export default function App() {
       const qIndex = getQuarterIndex(month);
 
       const refineryMargin = getHistoryValue(orlenMarginHistory, year, qIndex, refineryMarginInput);
-      const logistics = getHistoryValue(logisticsHistory, year, qIndex, logisticsInput);
-      const retailMargin = getHistoryValue(retailHistory, year, qIndex, retailMarginInput);
+      const logistics = getHistoryValue(fuelType === 'Pb95' ? logisticsHistory : dieselLogisticsHistory, year, qIndex, logisticsInput);
+      const retailMargin = getHistoryValue(fuelType === 'Pb95' ? retailHistory : dieselRetailHistory, year, qIndex, retailMarginInput);
       const excise = getHistoryValue(fuelType === 'Pb95' ? exciseHistory : dieselExciseHistory, year, qIndex, exciseInput);
       const fuelFee = getHistoryValue(fuelType === 'Pb95' ? surchargeHistory : dieselSurchargeHistory, year, qIndex, fuelFeeInput);
       const reserveFee = getHistoryValue(strategicReserveHistory, year, qIndex, reserveFeeInput);
@@ -841,7 +869,7 @@ export default function App() {
       return null;
     };
 
-    return HISTORICAL_DATA.map(dataPoint => {
+    return HISTORICAL_DATA.map((dataPoint, index) => {
       const [year, month] = dataPoint.date.split('-');
       const qIndex = getQuarterIndex(month);
 
@@ -849,8 +877,8 @@ export default function App() {
       const usdPln = dataPoint.usdPln;
 
       const refineryMargin = findHistoryValue(orlenMarginHistory, year, qIndex);
-      const logistics = findHistoryValue(logisticsHistory, year, qIndex);
-      const retailMargin = findHistoryValue(retailHistory, year, qIndex);
+      const logistics = findHistoryValue(fuelType === 'Pb95' ? logisticsHistory : dieselLogisticsHistory, year, qIndex);
+      const retailMargin = findHistoryValue(fuelType === 'Pb95' ? retailHistory : dieselRetailHistory, year, qIndex);
       const excise = findHistoryValue(fuelType === 'Pb95' ? exciseHistory : dieselExciseHistory, year, qIndex);
       const fuelFee = findHistoryValue(fuelType === 'Pb95' ? surchargeHistory : dieselSurchargeHistory, year, qIndex);
       const reserveFee = findHistoryValue(strategicReserveHistory, year, qIndex);
@@ -876,6 +904,7 @@ export default function App() {
 
       return { 
         ...dataPoint, 
+        index,
         benchmarkPrice, 
         refineryMargin,
         logistics,
@@ -1025,8 +1054,12 @@ export default function App() {
               <button
                 onClick={() => {
                   setFuelType('Pb95');
-                  setExciseInput(1.50);
-                  setFuelFeeInput(0.21);
+                  setExciseInput(1.54);
+                  setFuelFeeInput(0.19);
+                  setLogisticsInput(0.48);
+                  setRetailMarginInput(0.22);
+                  setReserveFeeInput(0.05);
+                  setEmissionFeeInput(0.08);
                 }}
                 className={cn(
                   "px-6 py-2 rounded-lg text-sm font-bold transition-all",
@@ -1038,8 +1071,12 @@ export default function App() {
               <button
                 onClick={() => {
                   setFuelType('ON');
-                  setExciseInput(1.16);
+                  setExciseInput(1.20);
                   setFuelFeeInput(0.44);
+                  setLogisticsInput(0.52);
+                  setRetailMarginInput(0.25);
+                  setReserveFeeInput(0.05);
+                  setEmissionFeeInput(0.08);
                 }}
                 className={cn(
                   "px-6 py-2 rounded-lg text-sm font-bold transition-all",
@@ -1458,10 +1495,10 @@ export default function App() {
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      {brentHistory.map(item => (
+                                      {groupedHistoricalData.map(item => (
                                         <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
                                           <td className={cn("py-1.5 font-medium text-slate-300")}>{item.year}{item.year === '2020' && ''}</td>
-                                          {item.q.map((val, i) => (
+                                          {item.brent.map((val, i) => (
                                             <td key={i} className={cn("py-1.5 text-center font-mono text-white")}>
                                               {val !== null ? val.toFixed(2) : '-'}
                                             </td>
@@ -1471,7 +1508,7 @@ export default function App() {
                                     </tbody>
                                   </table>
                                   <p className="text-[10px] text-slate-400 mt-3 text-right">
-                                    {brentHistory.some(h => h.year === '2020') && <span className="block mb-1">* 2020: Pandemia COVID-19</span>}
+                                    {groupedHistoricalData.some(h => h.year === '2020') && <span className="block mb-1">* 2020: Pandemia COVID-19</span>}
                                     Źródło: Notowania giełdowe
                                   </p>
                                   <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
@@ -1500,10 +1537,10 @@ export default function App() {
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      {usdPlnHistory.map(item => (
+                                      {groupedHistoricalData.map(item => (
                                         <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
                                           <td className={cn("py-1.5 font-medium text-slate-300")}>{item.year}{item.year === '2022' && '*'}</td>
-                                          {item.q.map((val, i) => (
+                                          {item.usdPln.map((val, i) => (
                                             <td key={i} className={cn("py-1.5 text-center font-mono text-white")}>
                                               {val !== null ? val.toFixed(2) : '-'}
                                             </td>
@@ -1513,7 +1550,7 @@ export default function App() {
                                     </tbody>
                                   </table>
                                   <p className="text-[10px] text-slate-400 mt-3 text-right">
-                                    {usdPlnHistory.some(h => h.year === '2022') && <span className="block mb-1">* 2022: Wojna na Ukrainie i kryzys energetyczny</span>}
+                                    {groupedHistoricalData.some(h => h.year === '2022') && <span className="block mb-1">* 2022: Wojna na Ukrainie i kryzys energetyczny</span>}
                                     Źródło: Dane NBP, EBC
                                   </p>
                                   <div className="absolute bottom-full right-4 border-8 border-transparent border-b-slate-950" />
@@ -1767,7 +1804,7 @@ export default function App() {
                                       </tr>
                                     </thead>
                                     <tbody>
-                                      {retailHistory.map(item => (
+                                      {(fuelType === 'Pb95' ? retailHistory : dieselRetailHistory).map(item => (
                                         <tr key={item.year} className="border-b border-slate-800/50 last:border-b-0">
                                           <td className="py-1.5 font-medium text-slate-300">{item.year}</td>
                                           {item.q.map((val, i) => (
@@ -2045,11 +2082,11 @@ export default function App() {
                     <CartesianGrid strokeDasharray="3 3" vertical={true} stroke="#f1f5f9" />
                     <XAxis
                       dataKey="date"
+                      ticks={HISTORICAL_DATA.filter((_, i) => i % 4 === 0).map(d => d.date)}
                       axisLine={{ stroke: '#e2e8f0' }}
                       tickLine={true}
                       tick={{ fontSize: 10, fontWeight: 600, fill: '#475569' }}
                       dy={10}
-                      minTickGap={30}
                       tickFormatter={(value) => value.split('-')[0]}
                     />
                     <YAxis
