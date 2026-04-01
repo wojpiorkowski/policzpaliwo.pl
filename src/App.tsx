@@ -500,6 +500,107 @@ const ModelAssumptionsModal = ({ isOpen, onClose, fuelType }: { isOpen: boolean,
   );
 };
 
+const getQuarterIndex = (month: string): number => {
+  switch (month) {
+    case '01':
+    case '03':
+      return 0;
+    case '04':
+      return 1;
+    case '07':
+      return 2;
+    case '10':
+      return 3;
+    default:
+      return 0;
+  }
+};
+
+const getHistoryValue = (history: any[], year: string, quarterIndex: number, fallbackValue: number): number => {
+  const yearData = history.find(h => h.year === year);
+  if (!yearData) return fallbackValue;
+
+  const value = yearData.q[quarterIndex];
+  if (value !== null && value !== undefined) {
+    return value;
+  }
+  if (year === history[history.length - 1]?.year && yearData.current !== undefined) return yearData.current;
+  return fallbackValue;
+};
+
+const CustomChartTooltip = ({ active, payload, label }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    const [year, month] = label.split('-');
+    const months: { [key: string]: string } = {
+      '01': 'Styczeń', '04': 'Kwiecień', '07': 'Lipiec', '10': 'Październik', '03': 'Marzec'
+    };
+    const dateLabel = `${months[month] || month} ${year}`;
+    
+    let breakdownNode = null;
+    if (data.refineryMargin !== undefined && data.refineryMargin !== null && data.benchmarkPrice !== null) {
+      const rawCost = ((data.brent + data.refineryMargin) / 159) * data.usdPln;
+      const fixedFees = data.logistics + data.excise + data.fuelFee + data.reserveFee + data.emissionFee;
+      const netPrice = rawCost + fixedFees + data.retailMargin;
+      const vatAmount = netPrice * (data.vat / 100);
+      
+      breakdownNode = (
+        <div className="mt-4 pt-3 border-t border-slate-700/50">
+          <p className="text-slate-600 font-semibold mb-2">Szczegóły wyliczenia ceny modelowej (Benchmark):</p>
+          <div className="space-y-1.5 text-[11px] text-slate-700 font-mono">
+            <p>
+              1. Koszt surowca: <br/>
+              <span className="pl-2">(({data.brent.toFixed(2)} + {data.refineryMargin.toFixed(2)}) / 159) * {data.usdPln.toFixed(2)} = {rawCost.toFixed(2)} zł/l</span>
+            </p>
+            <div>
+              <p>2. Składowe stałe (netto):</p>
+              <div className="pl-4 text-[10px] text-slate-400 whitespace-pre leading-relaxed my-0.5">
+                <p>• Logistyka i blending: <span className="text-slate-700">{data.logistics.toFixed(2)} zł/l</span></p>
+                <p>• Akcyza:               <span className="text-slate-700">{data.excise.toFixed(2)} zł/l</span></p>
+                <p>• Opłata paliwowa:      <span className="text-slate-700">{data.fuelFee.toFixed(2)} zł/l</span></p>
+                <p>• Opłata zapasowa:      <span className="text-slate-700">{data.reserveFee.toFixed(2)} zł/l</span></p>
+                <p>• Opłata emisyjna:      <span className="text-slate-700">{data.emissionFee.toFixed(2)} zł/l</span></p>
+              </div>
+              <p className="pl-2">Suma opłat netto: {fixedFees.toFixed(2)} zł/l</p>
+            </div>
+            <p>
+              3. Marża detaliczna (Historyczna): <br/>
+              <span className="pl-2">{data.retailMargin.toFixed(2)} zł/l</span>
+            </p>
+            <p>
+              4. Podatek VAT ({data.vat}%): <br/>
+              <span className="pl-2">+{vatAmount.toFixed(2)} zł/l</span>
+            </p>
+            <div className="border-t border-slate-700/50 my-2"></div>
+            <p className="font-bold text-slate-900 text-xs">
+              WYNIK KOŃCOWY: {data.benchmarkPrice.toFixed(2)} zł/l
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="bg-white rounded-2xl border border-slate-100 shadow-xl p-4 text-xs min-w-[200px] z-50 relative">
+        <p className="font-bold text-slate-800 mb-2">{dateLabel}</p>
+        {payload.map((entry: any, index: number) => (
+          <div key={index} className="flex justify-between items-center gap-4 mb-1.5">
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
+              <span className="text-slate-600 font-medium">{entry.name}</span>
+            </div>
+            <span className="font-bold text-slate-900">
+              {typeof entry.value === 'number' ? entry.value.toFixed(2) : entry.value}
+            </span>
+          </div>
+        ))}
+        {breakdownNode}
+      </div>
+    );
+  }
+  return null;
+};
+
 export default function App() {
   const [brentInput, setBrentInput] = useState(72);
   const [usdPlnInput, setUsdPlnInput] = useState(4.00);
@@ -518,6 +619,7 @@ export default function App() {
   const [error, setError] = useState<string | null>(null);
   const [hasCustomKey, setHasCustomKey] = useState<boolean | null>(null);
   const [isModelAssumptionsModalOpen, setIsModelAssumptionsModalOpen] = useState(false);
+  const [activeChartData, setActiveChartData] = useState<any | null>(null);
   const [showRefineryTooltip, setShowRefineryTooltip] = useState(false);
   const [showLogisticsTooltip, setShowLogisticsTooltip] = useState(false);
   const [showRetailTooltip, setShowRetailTooltip] = useState(false);
@@ -633,9 +735,8 @@ export default function App() {
     retailMargin: number,
     vat: number
   ) => {
-    const rawOilPricePlnL = (brent / 159) * usdPln;
-    const refMarginPlnL = (refineryMargin / 159) * usdPln;
-    const basePricePlnL = rawOilPricePlnL + refMarginPlnL;
+    // Obliczenie ceny surowca według nowego wzoru z uwzględnieniem Aktualnej_Marży
+    const basePricePlnL = ((brent + refineryMargin) / 159) * usdPln;
     const sumWithoutRetailMargin = basePricePlnL + logistics + excise + fuelFee + reserveFee + emissionFee;
     const priceWithRetailMargin = sumWithoutRetailMargin + retailMargin;
     const finalGrossPrice = priceWithRetailMargin * (1 + vat / 100);
@@ -665,18 +766,38 @@ export default function App() {
     );
   }, [brentInput, usdPlnInput, fuelType]);
 
+  const { displayedEstimatedPrice, displayedEstimatedPriceLabel } = useMemo(() => {
+    if (activeChartData) {
+      const { date, brent, usdPln } = activeChartData;
+      const [year, month] = date.split('-');
+      const qIndex = getQuarterIndex(month);
+
+      const refineryMargin = getHistoryValue(refineryHistory, year, qIndex, refineryMarginInput);
+      const logistics = getHistoryValue(logisticsHistory, year, qIndex, logisticsInput);
+      const retailMargin = getHistoryValue(retailHistory, year, qIndex, retailMarginInput);
+      const excise = getHistoryValue(fuelType === 'Pb95' ? exciseHistory : dieselExciseHistory, year, qIndex, exciseInput);
+      const fuelFee = getHistoryValue(fuelType === 'Pb95' ? surchargeHistory : dieselSurchargeHistory, year, qIndex, fuelFeeInput);
+      const reserveFee = getHistoryValue(strategicReserveHistory, year, qIndex, reserveFeeInput);
+      const emissionFee = getHistoryValue(emissionFeeHistory, year, qIndex, emissionFeeInput);
+      const vat = getHistoryValue(vatHistory, year, qIndex, vatInput);
+
+      const price = calculatePrice(brent, usdPln, refineryMargin, logistics, excise, fuelFee, reserveFee, emissionFee, retailMargin, vat);
+
+      const months: { [key: string]: string } = { '01': 'Styczeń', '04': 'Kwiecień', '07': 'Lipiec', '10': 'Październik', '03': 'Marzec' };
+      const label = `${months[month] || month} ${year}`;
+
+      return { displayedEstimatedPrice: price, displayedEstimatedPriceLabel: label };
+    }
+
+    return { displayedEstimatedPrice: baseCalculatedPrice, displayedEstimatedPriceLabel: null };
+  }, [activeChartData, baseCalculatedPrice, fuelType, refineryMarginInput, logisticsInput, retailMarginInput, exciseInput, fuelFeeInput, reserveFeeInput, emissionFeeInput, vatInput]);
+
   const priceStructure = useMemo(() => {
     const rawOilPricePlnL = (brentInput / 159) * usdPlnInput;
     const refMarginPlnL = (refineryMarginInput / 159) * usdPlnInput;
-    const basePricePlnL = rawOilPricePlnL + refMarginPlnL;
-
-    const sumWithoutRetailMargin = basePricePlnL + logisticsInput + exciseInput + fuelFeeInput + reserveFeeInput + emissionFeeInput;
-
     const retailMarginAmount = retailMarginInput;
-    const priceWithRetailMargin = sumWithoutRetailMargin + retailMarginAmount;
-
+    const priceWithRetailMargin = (rawOilPricePlnL + refMarginPlnL) + logisticsInput + exciseInput + fuelFeeInput + reserveFeeInput + emissionFeeInput + retailMarginAmount;
     const vatAmount = priceWithRetailMargin * (vatInput / 100);
-
     const taxesNet = exciseInput + fuelFeeInput + reserveFeeInput + emissionFeeInput;
     const totalTaxes = taxesNet + vatAmount;
     const marginsAndLogistics = refMarginPlnL + logisticsInput + retailMarginAmount;
@@ -692,13 +813,8 @@ export default function App() {
   const detailedPriceStructure = useMemo(() => {
     const rawOilPricePlnL = (brentInput / 159) * usdPlnInput;
     const refMarginPlnL = (refineryMarginInput / 159) * usdPlnInput;
-    const basePricePlnL = rawOilPricePlnL + refMarginPlnL;
-
-    const sumWithoutRetailMargin = basePricePlnL + logisticsInput + exciseInput + fuelFeeInput + reserveFeeInput + emissionFeeInput;
-
     const retailMarginAmount = retailMarginInput;
-    const priceWithRetailMargin = sumWithoutRetailMargin + retailMarginAmount;
-
+    const priceWithRetailMargin = (rawOilPricePlnL + refMarginPlnL) + logisticsInput + exciseInput + fuelFeeInput + reserveFeeInput + emissionFeeInput + retailMarginAmount;
     const vatAmount = priceWithRetailMargin * (vatInput / 100);
 
     return [
@@ -728,21 +844,6 @@ export default function App() {
   }, [realTimeData, fuelType, baseCalculatedPrice]);
 
   const chartData = useMemo(() => {
-    const getQuarterIndex = (month: string): number => {
-      switch (month) {
-        case '01':
-        case '03':
-          return 0;
-        case '04':
-          return 1;
-        case '07':
-          return 2;
-        case '10':
-          return 3;
-        default:
-          return 0;
-      }
-    };
 
     const findHistoryValue = (history: any[], year: string, quarterIndex: number) => {
       const yearData = history.find(h => h.year === year);
@@ -781,11 +882,31 @@ export default function App() {
         return { ...dataPoint, benchmarkPrice: null };
       }
 
-      const rawOilPricePlnL = ((brent + refineryMargin!) / 159) * usdPln;
-      const sumNetto = rawOilPricePlnL + logistics! + retailMargin! + excise! + fuelFee! + reserveFee! + emissionFee!;
-      const benchmarkPrice = sumNetto * (1 + vat! / 100);
+      const benchmarkPrice = calculatePrice(
+        brent,
+        usdPln,
+        refineryMargin,
+        logistics,
+        excise,
+        fuelFee,
+        reserveFee,
+        emissionFee,
+        retailMargin,
+        vat
+      );
 
-      return { ...dataPoint, benchmarkPrice: benchmarkPrice };
+      return { 
+        ...dataPoint, 
+        benchmarkPrice, 
+        refineryMargin,
+        logistics,
+        excise,
+        fuelFee,
+        reserveFee,
+        emissionFee,
+        retailMargin,
+        vat
+      };
     });
   }, [fuelType]);
 
@@ -999,14 +1120,20 @@ export default function App() {
                     </button>
                   </div>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-6xl sm:text-7xl font-black tracking-tighter">
-                      {baseCalculatedPrice.toFixed(2)}
+                    <span className="text-6xl sm:text-7xl font-black tracking-tighter transition-colors duration-300">
+                      {displayedEstimatedPrice.toFixed(2)}
                     </span>
                     <span className="text-2xl font-bold text-white/60">PLN/l</span>
                   </div>
-                  <p className="mt-4 text-sm text-white/60 leading-relaxed max-w-sm">
-                    Cena wyliczona na podstawie aktualnych notowań ropy i walut przy stałych, standardowych stawkach podatków i opłat.
-                  </p>
+                  {displayedEstimatedPriceLabel ? (
+                    <p className="mt-4 text-sm text-emerald-300 leading-relaxed max-w-sm">
+                      Wyliczono na podstawie danych historycznych dla: {displayedEstimatedPriceLabel}.
+                    </p>
+                  ) : (
+                    <p className="mt-4 text-sm text-white/60 leading-relaxed max-w-sm">
+                      Cena wyliczona na podstawie aktualnych notowań ropy i walut przy stałych, standardowych stawkach podatków i opłat.
+                    </p>
+                  )}
                 </div>
 
                 {/* Right side - Real market */}
@@ -1912,7 +2039,20 @@ export default function App() {
 
               <div className="h-[300px] sm:h-[400px] w-full">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={chartData} margin={{ top: 10, right: 5, left: -20, bottom: 0 }}>
+                  <AreaChart
+                    data={chartData}
+                    onMouseMove={(e) => {
+                      if (e.activePayload && e.activePayload.length > 0) {
+                        if (activeChartData?.date !== e.activePayload[0].payload.date) {
+                          setActiveChartData(e.activePayload[0].payload);
+                        }
+                      }
+                    }}
+                    onMouseLeave={() => {
+                      setActiveChartData(null);
+                    }}
+                    margin={{ top: 10, right: 5, left: -20, bottom: 0 }}
+                  >
                     <defs>
                       <linearGradient id="colorPb95" x1="0" y1="0" x2="0" y2="1">
                         <stop offset="5%" stopColor="#10b981" stopOpacity={0.15} />
@@ -1951,28 +2091,7 @@ export default function App() {
                       width={40}
                     />
                     <Tooltip
-                      contentStyle={{
-                        backgroundColor: '#fff',
-                        borderRadius: '16px',
-                        border: '1px solid #f1f5f9',
-                        boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)',
-                        padding: '12px'
-                      }}
-                      labelStyle={{ fontWeight: 700, marginBottom: '4px', color: '#1e293b' }}
-                      itemStyle={{ fontSize: '12px', fontWeight: 600, padding: '2px 0' }}
-                      labelFormatter={(label) => {
-                        const [year, month] = label.split('-');
-                        const months: { [key: string]: string } = {
-                          '01': 'Styczeń', '04': 'Kwiecień', '07': 'Lipiec', '10': 'Październik', '03': 'Marzec'
-                        };
-                        return `${months[month] || month} ${year}`;
-                      }}
-                      formatter={(value: any) => {
-                        if (typeof value === 'number') {
-                          return value.toFixed(2);
-                        }
-                        return value;
-                      }}
+                      content={<CustomChartTooltip />}
                     />
                     {fuelType === 'Pb95' ? (
                       <Area
